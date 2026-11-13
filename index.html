@@ -80,6 +80,27 @@ header h1 small{display:block;font-weight:500;color:var(--muted);font-size:.78re
 .feedback{margin-top:12px;border-radius:16px;padding:12px 14px;font-weight:600}
 .feedback.ok{background:#e3f6ea}.feedback.bad{background:#fdecec}
 .speak{border:0;background:#fde4ef;border-radius:50%;width:38px;height:38px;font-size:1.1rem;cursor:pointer;vertical-align:middle;margin-left:6px}
+.coins.sm .coin{width:42px;height:42px;font-size:.72rem}
+.coins.sm .note{padding:9px 7px;font-size:.8rem}
+.blocks{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;align-items:flex-end;margin:4px 0 8px}
+.bgrp{display:flex;gap:3px;align-items:flex-end;flex-wrap:wrap;justify-content:center;max-width:100%}
+.blocks i,.legend i{display:inline-block}
+.bh{width:46px;height:46px;background:#f6a623;background-image:linear-gradient(#0000002a 1px,transparent 1px),linear-gradient(90deg,#0000002a 1px,transparent 1px);background-size:4.6px 4.6px;border:2px solid #b4690e;border-radius:3px}
+.bt{width:9px;height:46px;background:#3b82f6;background-image:linear-gradient(#00000035 1px,transparent 1px);background-size:9px 4.6px;border:2px solid #1e40af;border-radius:2px}
+.bo{width:9px;height:9px;background:#22c55e;border:2px solid #15803d;border-radius:2px}
+.bh.mini{width:14px;height:14px;background-size:1.4px 1.4px}.bt.mini{height:14px;width:5px;background-size:5px 1.4px}
+.legend{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;font-size:.78rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:4px}
+table.glose{width:100%;border-collapse:collapse}
+table.glose td{padding:8px 4px;border-bottom:1px solid #eee3c8;vertical-align:middle}
+table.glose td.ge{font-size:1.9rem;width:46px;text-align:center}
+table.glose td.gs{width:56px;text-align:right}
+table.glose .speak{width:44px;height:44px;margin:0}
+.flash{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;min-height:260px;border:0;border-radius:24px;background:#fff;box-shadow:0 4px 14px #0000001a;font-family:inherit;color:var(--ink);cursor:pointer;margin:6px 0 12px}
+.flash.back{background:#fde4ef}
+.flash .fe{font-size:4.5rem}.flash b{font-size:1.8rem}.flash small{color:var(--muted)}
+.btn:disabled{opacity:.45}
+.center .speak{width:54px;height:54px;font-size:1.4rem}
 /* dyr */
 .zoo{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .animal{background:var(--card);border-radius:16px;padding:10px 4px;text-align:center;box-shadow:0 2px 8px #0000000d;cursor:pointer;border:0;font-family:inherit;color:var(--ink)}
@@ -111,6 +132,32 @@ table.hist td{padding:6px 4px;border-bottom:1px solid #eee3c8}
 <div id="confetti"></div>
 <script>
 /* =====================================================================
+   UKENS GLOSER (engelsk) – én liste per tema, koblet til uke i WEEK_CONTENT (gloser: ...)
+   words: { e: emoji, en: engelsk, no: norsk }   phrases: { en, no }
+   ===================================================================== */
+const GLOSER_CLOTHES = {
+  tema: "Clothes – klær",
+  words: [
+    { e:"👕", en:"T-shirt",  no:"t-skjorte" }, { e:"🧶", en:"sweater", no:"genser" },
+    { e:"👖", en:"trousers", no:"bukse" },     { e:"👖", en:"jeans",   no:"olabukse / jeans" },
+    { e:"💃", en:"skirt",    no:"skjørt" },    { e:"👗", en:"dress",   no:"kjole" },
+    { e:"👟", en:"shoes",    no:"sko" },       { e:"🧦", en:"socks",   no:"sokker" },
+    { e:"👒", en:"hat",      no:"lue / hatt" },{ e:"🧢", en:"cap",     no:"caps" },
+    { e:"🧥", en:"jacket",   no:"jakke" },     { e:"🧣", en:"scarf",   no:"skjerf" },
+    { e:"🧤", en:"gloves",   no:"hansker" },   { e:"🥾", en:"boots",   no:"støvler" },
+    { e:"🩳", en:"shorts",   no:"shorts" },    { e:"🛌", en:"pyjamas", no:"pysjamas" }
+  ],
+  phrases: [
+    { en:"What are you wearing?", no:"Hva har du på deg?" },
+    { en:"I am wearing a red sweater.", no:"Jeg har på meg en rød genser." },
+    { en:"What am I wearing?", no:"Hva har jeg på meg?" },
+    { en:"She is wearing a blue dress.", no:"Hun har på seg en blå kjole." },
+    { en:"He is wearing black boots.", no:"Han har på seg svarte støvler." },
+    { en:"Put on your jacket!", no:"Ta på deg jakka!" }
+  ]
+};
+
+/* =====================================================================
    UKENS TEMA  –  bare temaer (ingen navn eller detaljer fra ukeplanen).
    Spørsmål: FØRSTE svaralternativ er riktig (stokkes i spillet).
    ===================================================================== */
@@ -120,6 +167,7 @@ const WEEK_CONTENT = {
     topics: ["Matte: addisjon og subtraksjon", "Norsk: fakta og kilder", "Naturfag: huden",
              "Engelsk: clothes – What am I wearing?", "Faktatekst: ulven", "Sosialt: si fine ting om deg selv"],
     focus: { matte: "regning", engelsk: "clothes" },
+    gloser: GLOSER_CLOTHES,
     questions: [
       { tema:"Faktatekst: ulven", text:"Ulven er et rovdyr. Den bor i en flokk sammen med familien sin. Ulvene jakter sammen og spiser blant annet elg og rådyr. Om natta kan de ule for å snakke med hverandre. Hunden vår er i slekt med ulven.",
         prompt:"Hvem bor ulven sammen med?", choices:["En flokk med familien sin","Helt alene hele livet","Med bjørnene","Med sauene på gården"], explain:"Ulven bor i en flokk, som er familien den hører til." },
@@ -144,6 +192,7 @@ const WEEK_CONTENT = {
     topics: ["Matte: oppstilt addisjon og subtraksjon", "Norsk: fakta og avsnitt", "Naturfag: huden er et skjold",
              "Engelsk: clothes", "Faktatekst: bjørnen", "Sosialt: tenk på hva du sier til en venn"],
     focus: { matte: "oppstilt", engelsk: "clothes" },
+    gloser: GLOSER_CLOTHES,
     questions: [
       { tema:"Faktatekst: bjørnen", text:"Brunbjørnen er Norges største rovdyr. Om vinteren sover den i et hi. Det kaller vi vinterdvale. Før vinteren spiser bjørnen masse bær, maur og fisk, så den blir tykk og god. Bjørneungene blir født inne i hiet midt på vinteren.",
         prompt:"Hvor sover bjørnen om vinteren?", choices:["I et hi","I et tre","I et rede","I vannet"], explain:"Bjørnen ligger i hiet sitt hele vinteren." },
@@ -315,14 +364,14 @@ const LEAGUES = [
   { name:"Champions League", min:12, icon:"🏆", msg:"CHAMPIONS LEAGUE! Alle riktige – helt rå!" }
 ];
 const SESSION_LEN = 12;
-const PLAN = ["matte","matte","matte","matte","norsk","norsk","norsk","engelsk","engelsk","tema","tema","dyr"];
+const PLAN = ["matte","matte","matte","matte","matte","norsk","norsk","engelsk","engelsk","tema","tema","dyr"];
 const SUBJ = { matte:{name:"Matte",icon:"🔢"}, norsk:{name:"Norsk",icon:"📖"}, engelsk:{name:"Engelsk",icon:"💬"}, tema:{name:"Ukens tema",icon:"⭐"}, dyr:{name:"Dyrefakta",icon:"🐾"} };
 const MAXLVL = 5;
 
 const STORE_KEY = "kari-safari-v1";
 const defaultState = { points:0, streak:0, bestStreak:0, lastDay:null, sound:true, week:null,
   lvl:{matte:1,norsk:1,engelsk:1}, run:{matte:0,norsk:0,engelsk:0}, miss:{matte:0,norsk:0,engelsk:0},
-  animals:[], bestLeague:-1, lastLeague:-1, leagueCount:[0,0,0,0,0], sessions:0, correct:0, answered:0, history:[] };
+  animals:[], bestLeague:-1, lastLeague:-1, leagueCount:[0,0,0,0,0], sessions:0, correct:0, answered:0, history:[], gloser:{} };
 let S = load();
 function load(){ try{ const o=JSON.parse(localStorage.getItem(STORE_KEY)||"{}"); const s=Object.assign({}, JSON.parse(JSON.stringify(defaultState)), o);
   for(const k of ["lvl","run","miss"]) s[k]=Object.assign({}, defaultState[k], o[k]||{}); return s; }catch(e){ return JSON.parse(JSON.stringify(defaultState)); } }
@@ -362,13 +411,16 @@ function beep(ok){ if(!S.sound) return; try{ actx=actx||new (window.AudioContext
 /* =====================================================================
    OPPGAVEGENERATORER
    ===================================================================== */
+const ENTALL={hundrere:"hundrer",tiere:"tier",enere:"ener"};
+function grammar(x){ return String(x).replace(/(^|[^0-9])1 (hundrere|tiere|enere)\b/g,(m,a,w)=>a+"1 "+ENTALL[w]); }
 function mk(subj, topic, prompt, answer, wrongs, extra={}){
+  if(subj==="matte"){ prompt=grammar(prompt); answer=grammar(answer); wrongs=wrongs.map(grammar); if(extra.explain) extra.explain=grammar(extra.explain); }
   answer=String(answer);
   const w = uniq(wrongs.map(String)).filter(x=>x!==answer).slice(0, extra.n ? extra.n-1 : 3);
   return Object.assign({ subj, topic, prompt, answer, choices: shuffle([answer, ...w]), explain:"", visual:"" }, extra);
 }
-function numWrongs(ans, cands){ const out=uniq(cands.filter(x=>Number.isFinite(x) && x>=0 && x!==ans));
-  let k=1; while(out.length<3){ const c = ans + (k%2? k : -k); if(c>=0 && !out.includes(c) && c!==ans) out.push(c); k++; }
+function numWrongs(ans, cands){ const out=uniq(cands.filter(x=>Number.isFinite(x) && x>=0 && x<=1000 && x!==ans));
+  let k=1; while(out.length<3){ const c = ans + (k%2? k : -k); if(c>=0 && c<=1000 && !out.includes(c) && c!==ans) out.push(c); k++; }
   return shuffle(out).slice(0,3); }
 function noCarryAdd(a,b){ let r=0,p=1; while(a>0||b>0){ r+=((a%10+b%10)%10)*p; a=Math.floor(a/10); b=Math.floor(b/10); p*=10; } return r; }
 function noBorrowSub(a,b){ let r=0,p=1; while(a>0||b>0){ r+=Math.abs(a%10-b%10)*p; a=Math.floor(a/10); b=Math.floor(b/10); p*=10; } return r; }
@@ -394,26 +446,178 @@ function genRegning(L, forceOppstilt){
   return mk("matte", opp?"oppstilt":"regning", opp? "Regn ut:" : `Hva er ${a} ${op} ${b}?`, ans, numWrongs(ans, wrong),
     { visual: opp? oppstiltHTML(a,op,b) : "", explain: add? `${a} + ${b} = ${ans}. Husk mente når enerne blir 10 eller mer.` : `${a} − ${b} = ${ans}. Husk å veksle når du ikke har nok enere.` });
 }
-/* --- MATTE: gangetabellen --- */
-function genGange(L){
-  const tabs = [[2,5,10],[2,3,5,10],[2,3,4,5,10],[2,3,4,5,10],[2,3,4,5,10]][L-1];
-  const t = pick(tabs), n = ri(1,10), ans=t*n;
-  const wr = numWrongs(ans, [ans+t, ans-t, (n+1)*(t+1)-1, t+n, ans+1]);
-  if(L>=4 && Math.random()<.5){ // manglende faktor
-    return mk("matte","gange",`${t} · ? = ${ans}`, n, numWrongs(n,[n+1,n-1,n+2,t]), {explain:`${t} · ${n} = ${ans}`});
-  }
-  if(L>=3 && Math.random()<.5){
-    const ctx = pick([
-      [`Det står ${n} rader med dansere. Det er ${t} dansere i hver rad. Hvor mange dansere er det?`],
-      [`${n} lag skal spille turnering. Hvert lag har ${t} spillere på banen. Hvor mange spillere er det til sammen?`],
-      [`En TV-serie har ${t} episoder hver uke. Hvor mange episoder kommer det på ${n} uker?`],
-      [`Du kjøper ${n} kinobilletter. Hver billett koster ${t*10} kr. Hvor mye koster det?`, true]
-    ]);
-    const isMoney = ctx[1]; const A = isMoney? ans*10 : ans;
-    return mk("matte","tekst",ctx[0], A + (isMoney?" kr":""), numWrongs(A, isMoney?[A+t*10,A-t*10,A+10]:[A+t,A-t,t+n]).map(x=>x+(isMoney?" kr":"")), {explain:`${n} · ${isMoney?t*10:t} = ${A}`});
-  }
-  return mk("matte","gange",`Hva er ${n} · ${t}?`, ans, wr, {explain:`${n} · ${t} = ${ans}. Tenk ${t}-gangen: ${Array.from({length:Math.min(n,5)},(_,i)=>(i+1)*t).join(", ")}${n>5?" …":""}`});
+/* --- MATTE: mer pluss og minus --- */
+function genTiervenner(L){
+  let a, target;
+  if(L===1){ target=10; a=ri(1,9); }
+  else if(L===2){ if(Math.random()<.5){ target=100; a=ri(1,9)*10; } else { a=ri(11,89); if(a%10===0) a++; target=Math.ceil(a/10)*10; } }
+  else if(L===3){ if(Math.random()<.5){ target=100; a=ri(11,89); if(a%10===0) a+=3; } else { a=ri(1,9)*100; target=1000; } }
+  else { if(Math.random()<.5){ target=1000; a=ri(11,99)*10; if(a%100===0) a+=50; } else { a=ri(101,989); if(a%100===0) a+=7; target=Math.ceil(a/100)*100; } }
+  const ans=target-a;
+  const name = target===10? "tiervenner" : target===100? "hundrevenner" : target===1000? "tusenvenner" : "neste hele tall";
+  return mk("matte","tiervenner",`${a} + ? = ${target}`, ans, numWrongs(ans,[ans+10,ans-10,ans+1,ans-1,(10-a%10)%10||ans+2]),
+    {visual:`<div class="oppstilt" style="font-size:1.5rem">${a} + <span style="color:#c8642c">?</span> = ${target}</div>`, explain:`${a} + ${ans} = ${target}. ${name[0].toUpperCase()+name.slice(1)}: hva mangler opp til ${target}?`});
 }
+function genHoderegning(L){
+  const add=Math.random()<.5; let a,b;
+  if(L===1){ a=ri(1,8)*10; b=ri(1,9-a/10)*10; if(!add){ a=ri(3,9)*10; b=ri(1,a/10-1)*10; } }
+  else if(L===2){ a=ri(12,69); b=ri(1,3)*10; if(!add){ a=ri(42,98); b=ri(1,3)*10; } }
+  else if(L===3){ if(add){ a=ri(1,6)*100+ri(0,9)*10; b=ri(1,3)*100; } else { a=ri(4,9)*100+ri(0,9)*10; b=ri(1,3)*100; } }
+  else if(L===4){ if(add){ a=ri(120,780); b=pick([9,19,29,99]); } else { a=ri(150,900); b=pick([9,19,29,99]); } }
+  else { if(add){ a=ri(150,600); b=pick([198,199,299,99]); } else { a=ri(400,999); b=pick([198,199,99,299]); } }
+  if(!add && a-b<0){ [a,b]=[b,a]; }
+  const ans= add? a+b : a-b, op=add?"+":"−";
+  const tip = L>=4 ? (add? `Tips: ${a} + ${b} er det samme som ${a} + ${b+1} − 1.` : `Tips: ${a} − ${b} er det samme som ${a} − ${b+1} + 1.`) : "Regn i hodet. Tell tiere eller hundrere.";
+  return mk("matte","hoderegning",`Hoderegning: ${a} ${op} ${b} = ?`, ans, numWrongs(ans,[ans+10,ans-10,ans+1,ans-1,ans+2,ans+100]), {explain:`${a} ${op} ${b} = ${ans}. ${tip}`});
+}
+function genUkjent(L){
+  const R=[[3,9,20],[10,60,100],[15,85,100],[100,600,1000],[120,700,1000]][L-1];
+  const kind=rnd(3); let a,b,c,prompt,ans,expl;
+  a=ri(R[0],R[1]); b=ri(R[0],Math.max(R[0],Math.min(R[1],R[2]-a)));
+  if(L===2){ a=ri(1,7)*10+ri(1,9); b=ri(1,3)*10+ri(1,9); }
+  c=a+b;
+  if(kind===0){ prompt=`${a} + ? = ${c}`; ans=b; expl=`${c} − ${a} = ${b}, så ${a} + ${b} = ${c}.`; }
+  else if(kind===1){ prompt=`? + ${b} = ${c}`; ans=a; expl=`${c} − ${b} = ${a}.`; }
+  else { prompt=`${c} − ? = ${a}`; ans=b; expl=`${c} − ${b} = ${a}. Tenk: hvor mye må jeg ta bort?`; }
+  return mk("matte","ukjent ledd",`Hvilket tall mangler?`, ans, numWrongs(ans,[c, ans+10, ans-10, ans+1, ans-1, a+c>1000?ans+2:a+c]),
+    {visual:`<div class="oppstilt" style="font-size:1.5rem">${prompt.replace("?",'<span style="color:#c8642c">?</span>')}</div>`, explain:expl});
+}
+function genFinnFeil(L){
+  const make = ()=>{ const add=Math.random()<.5; let a,b;
+    if(L<=2){ if(add){ a=ri(12,78); b=ri(5,99-a); } else { a=ri(31,95); b=ri(5,a-10); } }
+    else if(L===3){ if(add){ a=ri(15,70); b=ri(15,99-a);} else { a=ri(40,99); b=ri(12,a-10);} }
+    else { if(add){ a=ri(120,600); b=ri(25,380);} else { a=ri(300,990); b=ri(25,a-100);} }
+    return {add,a,b}; };
+  const eqs=[]; let tries=0;
+  while(eqs.length<4 && tries++<200){ const e=make(); const s=`${e.a} ${e.add?"+":"−"} ${e.b}`; if(!eqs.some(x=>x.s===s)) eqs.push({...e,s}); }
+  // feil-regnestykket må ha mente/veksling slik at feilen blir realistisk
+  let w=0; for(let i=0;i<eqs.length;i++){ const e=eqs[i]; if(e.add?hasCarry(e.a,e.b):hasBorrow(e.a,e.b)){ w=i; break; } }
+  const e=eqs[w]; const right = e.add? e.a+e.b : e.a-e.b;
+  let wrongRes = e.add? noCarryAdd(e.a,e.b) : noBorrowSub(e.a,e.b); if(wrongRes===right) wrongRes = right + 10;
+  const lines = eqs.map((x,i)=> i===w ? `${x.s} = ${wrongRes}` : `${x.s} = ${x.add? x.a+x.b : x.a-x.b}`);
+  return mk("matte","finn feilen","Ett av regnestykkene er feil. Hvilket?", lines[w], lines.filter((_,i)=>i!==w), {wide:true,
+    explain:`${e.s} = ${right}, ikke ${wrongRes}. ${e.add? "Husk mente!" : "Husk å veksle!"}`});
+}
+function genPlussMinus(L){
+  const pool=[()=>genRegning(L,false), ()=>genRegning(L,false), genTiervenner, genHoderegning, genUkjent, ...(L>=2?[genFinnFeil]:[])];
+  return pick(pool)(L);
+}
+
+/* --- MATTE: plassverdi – enere, tiere, hundrere og veksling --- */
+function blocksHTML(h,t,o){
+  const g=(n,c)=> n? `<div class="bgrp">${`<i class="${c}"></i>`.repeat(n)}</div>` : "";
+  return `<div class="blocks">${g(h,"bh")}${g(t,"bt")}${g(o,"bo")}</div>
+    <div class="legend"><span><i class="bh mini"></i> hundrer = 100</span><span><i class="bt mini"></i> tier = 10</span><span><i class="bo"></i> ener = 1</span></div>`;
+}
+const PLASS = ["enerplassen","tierplassen","hundrerplassen"];
+function digits(n){ return {h:Math.floor(n/100), t:Math.floor(n/10)%10, o:n%10}; }
+function threeDigit(){ let n; do{ n=ri(101,989); }while(new Set(String(n)).size<3 || String(n).includes("0")); return n; }
+function genPlassverdi(L){
+  const k = rnd(L===1?3: L===2?5 : L===3?7 : 8);
+  // 0: les blokker  1: siffer på plass  2: sett sammen  3: sammenligne  4: størst/minst  5: veksle enkel  6: penger  7: veksle i subtraksjon
+  if(k===0){ const n = L===1? ri(11,99) : threeDigit(); const d=digits(n);
+    return mk("matte","plassverdi","Hvilket tall viser blokkene?", n, numWrongs(n,[d.t*100+d.h*10+d.o, d.o*10+d.t+d.h*100, n+10, n-10, n+1]).filter(x=>x!==n),
+      {visual:blocksHTML(d.h,d.t,d.o), explain:`${d.h? d.h+" hundrere + ":""}${d.t} tiere + ${d.o} enere = ${n}`}); }
+  if(k===1){ const n = L===1? ri(12,98) : threeDigit(); const d=digits(n); const p = L===1? rnd(2) : rnd(3); const ans=[d.o,d.t,d.h][p];
+    const ask = Math.random()<.5 ? `Hvilket siffer står på ${PLASS[p]} i ${n}?` : `${n} = ${L===1?"":`${p===2?"?":d.h} hundrere + `}${p===1?"?":d.t} tiere + ${p===0?"?":d.o} enere. Hvilket tall skal stå der spørsmålstegnet er?`;
+    return mk("matte","plassverdi",ask, ans, uniq([d.o,d.t,d.h,ans+1,ans-1,ans+2,ans-2,ans+3,ans-3].filter(x=>x>=0&&x<=9&&x!==ans)).slice(0,3),
+      {explain:`I ${n} er det ${d.h? d.h+" hundrere, ":""}${d.t} tiere og ${d.o} enere.`}); }
+  if(k===2){ const n = L<=2? (L===1? ri(21,99) : threeDigit()) : ri(101,999); const d=digits(n);
+    const order = L>=4 && Math.random()<.5;
+    const parts = order? [`${d.o} enere`,`${d.h} hundrere`,`${d.t} tiere`] : [`${d.h} hundrere`,`${d.t} tiere`,`${d.o} enere`];
+    const txt = (L===1? [`${d.t} tiere`,`${d.o} enere`] : parts).join(" + ");
+    return mk("matte","plassverdi",`${txt} = ?`, n, numWrongs(n,[d.o*100+d.t*10+d.h, d.h*100+d.o*10+d.t, d.h+d.t+d.o, n+10, n-100]),
+      {explain:`${txt} = ${n}${order?". Pass på rekkefølgen!":""}`}); }
+  if(k===3){ let a,b,showA,showB;
+    if(L<=2){ a=ri(12,98); b= Math.random()<.4? Number(String(a).split("").reverse().join("")) : a+pick([-10,-1,1,10,0]); }
+    else { a=threeDigit(); const s=String(a); b = pick([Number(s[0]+s[2]+s[1]), Number(s[1]+s[0]+s[2]), a+pick([-100,-10,10,100]), a]); }
+    if(b<0) b=a+1; showA=String(a); showB=String(b);
+    if(L>=4 && Math.random()<.6){ const d=digits(a); const ex = Math.random()<.5 ? `${d.h} hundrere + ${d.t} tiere + ${d.o} enere` : `${d.h*100} + ${d.t*10} + ${d.o}`; showA=ex; }
+    const ans = a<b? "<" : a>b? ">" : "=";
+    return mk("matte","sammenligne",`Hvilket tegn passer?`, ans, ["<",">","="], {n:3, visual:`<div class="oppstilt" style="font-size:1.35rem">${esc(showA)} <span style="color:#c8642c">?</span> ${esc(showB)}</div>`,
+      explain:`${a} ${ans} ${b}. Se på hundrerne først, så tierne, så enerne. Åpningen på < og > peker mot det største tallet.`}); }
+  if(k===4){ const base=threeDigit(); const s=String(base); let nums=uniq([base, Number(s[1]+s[0]+s[2]), Number(s[0]+s[2]+s[1]), Number(s[2]+s[1]+s[0])]).slice(0,3);
+    const big=Math.random()<.5; const ans= big? Math.max(...nums) : Math.min(...nums);
+    return mk("matte","størst og minst",`Hvilket tall er ${big?"STØRST":"MINST"}?`, ans, nums.filter(x=>x!==ans), {n:3, explain:`Rekkefølge: ${nums.slice().sort((x,y)=>x-y).join(" < ")}`}); }
+  if(k===5){ const v = L<=3 ? pick([
+      ()=>["1 tier = ? enere", 10, [1,100,5]], ()=>["1 hundrer = ? tiere", 10, [100,1,20]], ()=>["1 hundrer = ? enere", 100, [10,1000,1]],
+      ()=>{ const t=ri(2,5), o=ri(11,19); return [`${t} tiere og ${o} enere = ?`, t*10+o, [t*10+o-10, t+o, t*10+o+10]]; } ])()
+    : pick([
+      ()=>{ const h=ri(1,5), t=ri(11,19); return [`${h} hundrere og ${t} tiere = ?`, h*100+t*10, [h*100+t, h*100+t*10-100, h*100+t*10+100]]; },
+      ()=>{ const n=ri(3,9)*100+ri(1,9)*10; return [`Hvor mange tiere er det til sammen i ${n}?`, n/10, [Math.floor(n/10)%10, Math.floor(n/100), n/10+10]]; },
+      ()=>{ const h=ri(2,6), t=ri(1,8), o=ri(12,25); return [`${h} hundrere, ${t} tiere og ${o} enere = ?`, h*100+t*10+o, [h*100+t*10+o-10, h*100+t*10+o+10, h*100+(t+o)]]; } ])();
+    return mk("matte","veksling",v[0], v[1], numWrongs(v[1], v[2]), {explain:`Husk: 10 enere = 1 tier, og 10 tiere = 1 hundrer. Svaret er ${v[1]}.`}); }
+  if(k===6){ const h= L<=3? ri(1,3) : ri(2,6), t= L<=3? ri(1,6) : ri(4,9), o= L<=3? ri(1,7) : ri(3,9);
+    const items=[...Array(h).fill(100), ...Array(Math.min(t,9)).fill(10), ...Array(o).fill(1)];
+    const tReal=Math.min(t,9); const ans=h*100+tReal*10+o;
+    return mk("matte","penger og plassverdi","Hvor mye penger er dette?", ans+" kr", numWrongs(ans,[h*100+o*10+tReal, ans+10, ans-10, ans+100, h+tReal+o]).map(x=>x+" kr"),
+      {visual:moneyHTML(items,true), explain:`${h} hundrelapper = ${h*100} kr, ${tReal} tikroner = ${tReal*10} kr og ${o} enkroner = ${o} kr. Til sammen ${ans} kr.`}); }
+  // 7: veksling i subtraksjon
+  if(L<=4){ let a,b; do{ a=ri(31,98); b=ri(12,a-5); }while(!(a%10 < b%10));
+    const kind=rnd(2);
+    if(kind===0) return mk("matte","veksling i minus",`Du regner ${a} − ${b}. Du har for få enere, så du veksler én tier. Hva regner du på enerplassen?`, `${a%10+10} − ${b%10}`, [`${a%10} − ${b%10}`, `${b%10} − ${a%10}`, `10 − ${b%10}`, `${a%10+10} − ${Math.floor(b/10)}`, `${a%10+10} − ${b%10+10}`],
+      {wide:true, visual:oppstiltHTML(a,"−",b), explain:`${Math.floor(a/10)} tiere og ${a%10} enere blir ${Math.floor(a/10)-1} tiere og ${a%10+10} enere. ${a%10+10} − ${b%10} = ${a%10+10-b%10}. Svar: ${a-b}.`});
+    return mk("matte","veksling i minus",`${a} = ${Math.floor(a/10)-1} tiere og ? enere`, a%10+10, numWrongs(a%10+10,[a%10, a%10+1, 10, a%10+20]),
+      {visual:blocksHTML(0,Math.floor(a/10)-1,a%10+10), explain:`Én tier vekslet til 10 enere: ${a%10} + 10 = ${a%10+10} enere. Nå kan du regne ${a} − ${b} = ${a-b}.`}); }
+  let a,b; do{ a=ri(301,905); b=ri(102,a-50); }while(!(a%10<b%10) || Math.floor(a/10)%10===0);
+  const d=digits(a);
+  return mk("matte","veksling i minus",`Du regner ${a} − ${b} oppstilt og veksler én tier. Hvordan ser ${a} ut etterpå?`, `${d.h} hundrere, ${d.t-1} tiere og ${d.o+10} enere`,
+    [`${d.h} hundrere, ${d.t} tiere og ${d.o+10} enere`, `${d.h-1} hundrere, ${d.t} tiere og ${d.o+10} enere`, `${d.h} hundrere, ${d.t+1} tiere og ${d.o} enere`],
+    {wide:true, visual:oppstiltHTML(a,"−",b), explain:`Én tier blir til ti enere. ${a} − ${b} = ${a-b}.`});
+}
+
+/* --- MATTE: tallinje --- */
+function numberLineSVG(o){
+  // o: {lo, step, n, labels:[...], target, start, hops:[...positions]}
+  const W=340, pad=20, y=62, hi=o.lo+o.step*o.n, X=v=> pad + (v-o.lo)/(hi-o.lo)*(W-2*pad);
+  let s=`<svg viewBox="0 0 ${W} 100" width="100%" style="max-width:420px" role="img" aria-label="Tallinje">`;
+  s+=`<line x1="${pad-12}" y1="${y}" x2="${W-pad+12}" y2="${y}" stroke="#2b2418" stroke-width="2.5"/>`;
+  s+=`<path d="M${W-pad+14} ${y} l-8 -5 v10 z" fill="#2b2418"/>`;
+  for(let i=0;i<=o.n;i++){ const v=o.lo+i*o.step, lab=o.labels.includes(v);
+    s+=`<line x1="${X(v)}" y1="${y-(lab?10:6)}" x2="${X(v)}" y2="${y+(lab?10:6)}" stroke="#2b2418" stroke-width="${lab?2.5:1.5}"/>`;
+    if(lab) s+=`<text x="${X(v)}" y="${y+27}" font-size="${String(v).length>=4?11:13}" font-weight="700" text-anchor="middle" fill="#2b2418">${v}</text>`; }
+  if(o.hops){ let prev=o.start; s+=`<circle cx="${X(o.start)}" cy="${y}" r="5" fill="#2f6b3a"/>`;
+    o.hops.forEach(p=>{ const x1=X(prev), x2=X(p), mid=(x1+x2)/2, h=Math.min(30, Math.abs(x2-x1)*.7+8);
+      s+=`<path d="M${x1} ${y-3} Q${mid} ${y-3-h*1.6} ${x2} ${y-3}" fill="none" stroke="#c8642c" stroke-width="2.2"/>`;
+      s+=`<circle cx="${x2}" cy="${y-3}" r="2.5" fill="#c8642c"/>`; prev=p; }); }
+  if(o.target!==undefined){ const x=X(o.target);
+    s+=`<path d="M${x} ${y-4} l-7 -12 h14 z" fill="#e0609a"/><text x="${x}" y="${y-22}" font-size="18" font-weight="800" text-anchor="middle" fill="#e0609a">?</text>`; }
+  return s+`</svg>`;
+}
+function genTallinje(L){
+  const hop = Math.random()<.45;
+  if(!hop){
+    const cfg = pick([
+      [ {lo:0,step:1,n:20,lab:5}, {lo:0,step:10,n:10,lab:5}, {lo:0,step:2,n:10,lab:5} ],
+      [ {lo:ri(1,8)*10,step:1,n:10,lab:5}, {lo:0,step:5,n:10,lab:2}, {lo:0,step:10,n:10,lab:5} ],
+      [ {lo:0,step:100,n:10,lab:5}, {lo:ri(1,8)*100,step:10,n:10,lab:5}, {lo:0,step:5,n:20,lab:4} ],
+      [ {lo:ri(10,90)*10,step:1,n:10,lab:5}, {lo:ri(1,8)*100,step:10,n:10,lab:10}, {lo:0,step:50,n:20,lab:10}, {lo:ri(0,5)*100,step:20,n:10,lab:5} ],
+      [ {lo:ri(1,8)*100,step:10,n:10,lab:10}, {lo:0,step:50,n:20,lab:10}, {lo:ri(10,90)*10,step:2,n:10,lab:10}, {lo:ri(0,4)*100,step:50,n:10,lab:10} ]
+    ][L-1]);
+    const labels=[]; for(let i=0;i<=cfg.n;i+=cfg.lab) labels.push(cfg.lo+i*cfg.step);
+    let idx; do{ idx=ri(1,cfg.n-1); }while(idx%cfg.lab===0);
+    const ans=cfg.lo+idx*cfg.step;
+    const stepTxt = cfg.step===1? "én" : cfg.step;
+    return mk("matte","tallinje","Hvilket tall peker pilen på?", ans, numWrongs(ans,[ans+cfg.step, ans-cfg.step, ans+1, ans-1, ans+2*cfg.step, cfg.lo+idx]),
+      {visual:numberLineSVG({lo:cfg.lo, step:cfg.step, n:cfg.n, labels, target:ans}), explain:`Hvert lille steg på tallinja er ${stepTxt}. Tell fra ${labels.filter(v=>v<ans).pop()}: svaret er ${ans}.`});
+  }
+  // hopp på tallinja
+  const H = [ [1,[1,0,20]], [10,[10,0,100]], [pick([10,100]),[10,0,300]], [pick([10,100]),[100,0,1000]], [pick([10,100]),[10,0,1000]] ][L-1];
+  const size=H[0]; const k = ri(2, L===1?5:6); const back = L>=2 && Math.random()<.4;
+  let start; const maxV = size===1?20 : size===10 ? (L<=2?100:1000) : 1000;
+  do{ start = size===1? ri(0,15) : size===10? (L<=2? ri(0,9)*10 : ri(1,9)*100+ri(0,9)*10+(L>=4?ri(0,9):0)) : ri(1,9)*100+(L>=4? ri(0,9)*10:0); }
+  while(back? start-k*size<0 : start+k*size>maxV);
+  if(L===2) start = back? ri(k,10)*10 : ri(0,10-k)*10;
+  const end = back? start-k*size : start+k*size;
+  const hops = Array.from({length:k},(_,i)=> back? start-(i+1)*size : start+(i+1)*size);
+  const n=10; let lo = Math.min(start,end) - size*ri(0,Math.max(0,8-k)); lo=Math.min(lo, Math.max(0, maxV-n*size)); lo=Math.max(0, Math.min(lo, Math.min(start,end)));
+  const word = {1:["ener","enere"],10:["tier","tiere"],100:["hundrer","hundrere"]}[size];
+  const prompt = `Start på ${start}. Hopp ${k} ${k===1?word[0]:word[1]} ${back?"tilbake":"fram"}. Hvor lander du?`;
+  return mk("matte","hopp på tallinja",prompt, end, numWrongs(end,[end+size, end-size, back? start+k*size : start-k*size, back? start-k : start+k, end+1].filter(x=>x<=1000)),
+    {visual:numberLineSVG({lo, step:size, n, labels:[start], start, hops:hops.slice(0,-1).concat([end]), target:end}),
+     explain:`${start} ${back?"−":"+"} ${k} ${word[1]} (${k*size}) = ${end}.`});
+}
+
 /* --- MATTE: klokka --- */
 const HW = ["tolv","ett","to","tre","fire","fem","seks","sju","åtte","ni","ti","elleve"];
 function timePhrase(h,m){ const H=HW[h%12], N=HW[(h+1)%12];
@@ -446,7 +650,7 @@ function genKlokke(L){
     shuffle(cands), { visual: digital? "" : clockSVG(h,m), explain:`Den lille viseren viser timene, den store viser minuttene. Svaret er «${ans}».` });
 }
 /* --- MATTE: penger --- */
-function moneyHTML(items){ return `<div class="coins">${items.map(v=> v>=50? `<span class="note n${v}">${v} kr</span>` : `<span class="coin">${v} kr</span>`).join("")}</div>`; }
+function moneyHTML(items,sm){ return `<div class="coins${sm||items.length>6?" sm":""}">${items.map(v=> v>=50? `<span class="note n${v}">${v} kr</span>` : `<span class="coin">${v} kr</span>`).join("")}</div>`; }
 function genPenger(L){
   if(L<=2){ const pool = L===1?[1,5,10,20]:[5,10,20,50,100]; const n = L===1? ri(2,3) : ri(3,4);
     const items = Array.from({length:n},()=>pick(pool)).sort((a,b)=>b-a); const ans=items.reduce((s,x)=>s+x,0);
@@ -458,8 +662,9 @@ function genPenger(L){
   if(L===4){ let a,b; do{ a=pick(shop); b=pick(shop);}while(a===b||a[1]+b[1]>200);
     const tot=a[1]+b[1], ans=200-tot;
     return mk("matte","penger",`Du kjøper ${a[0]} (${a[1]} kr) og ${b[0]} (${b[1]} kr). Du betaler med 200 kr. Hvor mye får du igjen?`, ans+" kr", numWrongs(ans,[tot,ans+10,ans-10,noBorrowSub(200,tot)]).map(x=>x+" kr"), {visual:moneyHTML([200]), explain:`${a[1]} + ${b[1]} = ${tot}. 200 − ${tot} = ${ans} kr`}); }
-  const n=ri(2,5), p=pick([20,30,40,50,60,70,80,90]); const tot=n*p, ans=500-tot;
-  return mk("matte","penger",`${n} venner skal på kino. Billetten koster ${p} kr. De betaler med 500 kr til sammen. Hvor mye får de igjen?`, ans+" kr", numWrongs(ans,[tot,ans+p,ans-p,ans+10]).map(x=>x+" kr"), {visual:moneyHTML([200,200,100]), explain:`${n} · ${p} = ${tot}. 500 − ${tot} = ${ans} kr`});
+  let it; do{ it=shuffle(shop).slice(0,3); }while(it.reduce((x,y)=>x+y[1],0)>480);
+  const tot=it.reduce((x,y)=>x+y[1],0), ans=500-tot;
+  return mk("matte","penger",`Du kjøper ${it.map(x=>`${x[0]} (${x[1]} kr)`).join(", ").replace(/, ([^,]*)$/," og $1")}. Du betaler med 500 kr. Hvor mye får du igjen?`, ans+" kr", numWrongs(ans,[tot,ans+10,ans-10,noBorrowSub(500,tot),ans+100]).map(x=>x+" kr"), {visual:moneyHTML([200,200,100]), explain:`${it.map(x=>x[1]).join(" + ")} = ${tot}. 500 − ${tot} = ${ans} kr`});
 }
 /* --- MATTE: tekstoppgaver (fotball, dans, TV/film) --- */
 function genTekst(L){
@@ -471,17 +676,22 @@ function genTekst(L){
     ()=>{ const x=Math.max(a,b)+ri(big[0],big[1]), y=Math.min(a,b); return [`Danseshowet har ${x} seter. ${y} billetter er solgt. Hvor mange seter er ledige?`, x-y, "−", x, y]; },
     ()=>{ const x=[20,40,60,90,90,120,120,150][Math.min(7,ri(L,L+3))], y=ri(5,x-5); return [`En film varer i ${x} minutter. Dere har sett ${y} minutter. Hvor mange minutter er igjen?`, x-y, "−", x, y]; },
     ()=>[`På dansekonkurransen er det ${a} dansere i den ene gruppa og ${b} i den andre. Hvor mange dansere er det?`, a+b, "+"],
-    ()=>{ const x=Math.max(a,b)+ri(5,30), y=Math.min(a,b); return [`Det var ${x} tilskuere på kampen. ${y} gikk hjem i pausen. Hvor mange var igjen?`, x-y, "−", x, y]; }
+    ()=>{ const x=Math.max(a,b)+ri(5,30), y=Math.min(a,b); return [`Det var ${x} tilskuere på kampen. ${y} gikk hjem i pausen. Hvor mange var igjen?`, x-y, "−", x, y]; },
+    ()=>{ const x=Math.max(a,b)+ri(5,30), y=Math.min(a,b); return [`Laget har scoret ${y} mål denne sesongen. Målet er ${x} mål. Hvor mange mål mangler?`, x-y, "−", x, y]; },
+    ()=>{ const x=Math.max(a,b)+ri(5,30), y=Math.min(a,b); return [`En serie har ${x} episoder. Du har sett ${y}. Hvor mange episoder er det igjen?`, x-y, "−", x, y]; }
   ])();
   const ans=T[1];
   return mk("matte","tekst",T[0], ans, numWrongs(ans,[ans+10,ans-10,ans+1,ans-1, T[2]==="+"? Math.abs(a-b) : (T[3]+T[4])]), {explain: T[2]==="+"? `${a} + ${b} = ${ans}` : `${T[3]} − ${T[4]} = ${ans}`});
 }
 function genMatte(L, opts={}){
-  const w = W(); const pool = ["regning","regning","gange","gange","klokka","penger","tekst"];
-  if(w && w.focus && (w.focus.matte==="regning"||w.focus.matte==="oppstilt")) pool.push("regning","regning");
+  const w = W(); const focus = w && w.focus && w.focus.matte;
+  const pool = ["pm","pm","pm","plass","plass","plass","linje","linje","klokka","penger","tekst"];
+  if(focus==="regning"||focus==="oppstilt") pool.push("regning","regning");
   const t = opts.topic || pick(pool);
-  if(t==="regning") return genRegning(L, w && w.focus && w.focus.matte==="oppstilt" && L>=2);
-  if(t==="gange") return genGange(L);
+  if(t==="pm") return genPlussMinus(L);
+  if(t==="regning") return genRegning(L, focus==="oppstilt" && L>=2);
+  if(t==="plass") return genPlassverdi(L);
+  if(t==="linje") return genTallinje(L);
   if(t==="klokka") return genKlokke(L);
   if(t==="penger") return genPenger(L);
   return genTekst(L);
@@ -539,7 +749,7 @@ function genEngelsk(L){
   const t=pick(types);
   if(t==="colors") return pairQ(EN_COLORS,"farger");
   if(t==="body") return pairQ(EN_BODY,"kroppen");
-  if(t==="clothes") return pairQ(EN_CLOTHES,"klær");
+  if(t==="clothes") return pairQ(w && w.gloser ? w.gloser.words.map(x=>[x.en,x.no]) : EN_CLOTHES, w && w.gloser ? "ukens gloser" : "klær");
   if(t==="hobby") return pairQ(EN_HOBBY,"fritid");
   if(t==="phrases") return pairQ(EN_PHRASES,"fraser");
   if(t==="animals"){ const list=ANIMALS.map(a=>[a.en,a.no,a.e]); const p=pick(list); const wr=shuffle(list.filter(x=>x!==p)).slice(0,3);
@@ -649,10 +859,12 @@ function renderHome(){
       <h3>⭐ Ukens tema – ${esc(w.label)}</h3>
       <ul class="topics small">${w.topics.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
     </div>
+    ${w.gloser? `<button class="btn" id="btnGloser" style="background:var(--pink);box-shadow:0 4px 0 #a33a6b">💬 Ukens gloser: ${esc(w.gloser.tema)} ${gloseStars(currentWeek())}</button>`:""}
     <div class="row">
       <button class="btn ghost" id="btnZoo">📒 Safaribok</button>
       <button class="btn ghost" id="btnCareer">📊 Min karriere</button>
     </div>`;
+  if($("#btnGloser")) $("#btnGloser").onclick=renderGloser;
   $("#btnStart").onclick=startSession;
   $("#btnZoo").onclick=renderZoo;
   $("#btnCareer").onclick=renderCareer;
@@ -801,6 +1013,72 @@ function renderCareer(){
     <div class="card"><h3>Siste safarier</h3>${S.history.length? `<table class="hist">${S.history.slice(0,10).map(h=>`<tr><td>${fmtDate(h.d)}</td><td>${h.r}/${h.n}</td><td>${esc(LEAGUES[h.l].name)}</td><td>${h.a.map(id=>animalById(id)?.e||"").join(" ")}</td></tr>`).join("")}</table>` : `<p class="muted small">Ingen safarier ennå.</p>`}</div>
     <button class="btn ghost" id="btnHome">🏠 Forsiden</button>`;
   $("#btnHome").onclick=renderHome;
+}
+
+
+/* ---------- ukens gloser (påvirker ikke ligaen) ---------- */
+function gloseStars(w){ const g=(S.gloser||{})[w]; if(!g) return ""; const st=g.best>=8?3:g.best>=6?2:g.best>=4?1:0; return "⭐".repeat(st); }
+function renderGloser(){
+  window.scrollTo(0,0); $("#confetti").innerHTML="";
+  const w=W(), g=w.gloser, best=(S.gloser[currentWeek()]||{}).best;
+  app.innerHTML = `<div class="card"><h2>💬 Ukens gloser</h2>
+      <p class="muted small">${esc(w.label)} · ${esc(g.tema)} · ${g.words.length} ord. Trykk 🔊 for å høre ordet.</p>
+      <div class="row"><button class="btn" id="btnFlash">🃏 Flashcards</button><button class="btn sun" id="btnGQuiz">✏️ Glosequiz</button></div>
+      <p class="muted small">${best!==undefined? `Beste quiz: ${best} av 8 ${gloseStars(currentWeek())}` : "Quizen gir ekstra poeng og stjerner. Den teller ikke i ligaen."}</p></div>
+    <div class="card"><table class="glose">${g.words.map(x=>`<tr><td class="ge">${x.e}</td><td><b>${esc(x.en)}</b><br><span class="muted small">${esc(x.no)}</span></td><td class="gs">${speakBtn(x.en)}</td></tr>`).join("")}</table></div>
+    <div class="card"><h3>Fraser</h3><table class="glose">${g.phrases.map(x=>`<tr><td><b>${esc(x.en)}</b><br><span class="muted small">${esc(x.no)}</span></td><td class="gs">${speakBtn(x.en)}</td></tr>`).join("")}</table></div>
+    <button class="btn ghost" id="btnHome">🏠 Forsiden</button>`;
+  bindSpeak();
+  $("#btnFlash").onclick=()=>renderFlash(shuffle(g.words),0,false);
+  $("#btnGQuiz").onclick=startGloseQuiz;
+  $("#btnHome").onclick=renderHome;
+}
+function renderFlash(list,i,back){
+  const x=list[i];
+  app.innerHTML = `<div class="qtop"><span class="tag t-engelsk">🃏 Flashcards</span><span class="muted small">${i+1} / ${list.length}</span><button class="iconbtn" id="btnX" aria-label="Lukk">✕</button></div>
+    <button class="flash ${back?"back":""}" id="card">${back? `<span class="fe">${x.e}</span><b>${esc(x.no)}</b><small>på norsk</small>` : `<span class="fe">${x.e}</span><b>${esc(x.en)}</b><small>trykk for å snu</small>`}</button>
+    <div class="center">${speakBtn(x.en)}</div>
+    <div class="row"><button class="btn ghost" id="bPrev" ${i===0?"disabled":""}>⬅ Forrige</button><button class="btn" id="bNext">${i===list.length-1?"Ferdig ✔":"Neste ➡"}</button></div>`;
+  bindSpeak();
+  $("#card").onclick=()=>renderFlash(list,i,!back);
+  $("#bPrev").onclick=()=>{ if(i>0) renderFlash(list,i-1,false); };
+  $("#bNext").onclick=()=>{ if(i<list.length-1) renderFlash(list,i+1,false); else renderGloser(); };
+  $("#btnX").onclick=renderGloser;
+}
+let GQ=null;
+function gloseQuestions(g){
+  return shuffle(g.words).slice(0,8).map(x=>{ const others=shuffle(g.words.filter(y=>y!==x)); const k=rnd(3);
+    if(k===0) return mk("engelsk","ukens gloser",`Hva betyr «${esc(x.en)}»?`, x.no, others.map(y=>y.no), {say:x.en, sayInPrompt:true, explain:`${x.en} = ${x.no}`});
+    if(k===1) return mk("engelsk","ukens gloser",`Hva heter «${esc(x.no)}» på engelsk?`, x.en, others.map(y=>y.en), {say:x.en, explain:`${x.no} = ${x.en}`});
+    return mk("engelsk","ukens gloser",`Hva er dette på engelsk? <span style="font-size:2.4rem">${x.e}</span>`, x.en, others.filter(y=>y.e!==x.e).map(y=>y.en), {say:x.en, explain:`${x.e} = ${x.en} (${x.no})`}); });
+}
+function startGloseQuiz(){ GQ={qs:gloseQuestions(W().gloser), i:0, right:0, done:false}; renderGQ(); }
+function renderGQ(){
+  window.scrollTo(0,0); const q=GQ.qs[GQ.i];
+  app.innerHTML = `<div class="qtop"><span class="tag t-engelsk">✏️ Glosequiz</span><span class="muted small">${GQ.i+1} / ${GQ.qs.length}</span><button class="iconbtn" id="btnX" aria-label="Lukk">✕</button></div>
+    <div class="card"><div class="small muted" style="margin-bottom:6px">Teller ikke i ligaen · ${GQ.right} riktig${GQ.right===1?"":"e"}</div>
+      <div class="prompt">${q.prompt} ${q.sayInPrompt? speakBtn(q.say):""}</div>
+      <div class="choices">${q.choices.map((c,k)=>`<button class="choice" data-k="${k}">${esc(c)}</button>`).join("")}</div><div id="fb"></div></div>`;
+  bindSpeak(); $("#btnX").onclick=renderGloser;
+  app.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{
+    if(app.querySelector(".choice:disabled")) return; const k=+b.dataset.k, ok=q.choices[k]===q.answer; if(ok) GQ.right++;
+    app.querySelectorAll(".choice").forEach((x,j)=>{ x.disabled=true; if(q.choices[j]===q.answer) x.classList.add("right"); else if(j===k) x.classList.add("wrong"); });
+    beep(ok);
+    $("#fb").innerHTML=`<div class="feedback ${ok?"ok":"bad"}">${ok?"Riktig! 🎉":`Riktig svar: <b>${esc(q.answer)}</b>`}<div class="small" style="margin-top:6px;font-weight:500">${esc(q.explain)} ${speakBtn(q.say)}</div></div>
+      <button class="btn" id="bN">${GQ.i===GQ.qs.length-1?"Se resultatet 🏁":"Neste ➜"}</button>`;
+    bindSpeak(); $("#bN").onclick=()=>{ GQ.i++; if(GQ.i>=GQ.qs.length) finishGQ(); else renderGQ(); };
+  });
+}
+function finishGQ(){
+  const w=currentWeek(), pts=GQ.right*5; const prev=S.gloser[w]||{best:0,played:0};
+  const rec = GQ.right>prev.best;
+  S.gloser[w]={best:Math.max(prev.best,GQ.right), played:(prev.played||0)+1}; S.points+=pts; save();
+  app.innerHTML=`<div class="card center"><h2>✏️ ${GQ.right} av ${GQ.qs.length} riktige</h2>
+      <p style="font-size:2rem;margin:6px 0">${"⭐".repeat(GQ.right>=8?3:GQ.right>=6?2:GQ.right>=4?1:0) || "💪"}</p>
+      <p>+${pts} poeng${rec?" · ny gloserekord!":""}</p><p class="muted small">Glosequizen påvirker ikke ligaen eller streaken.</p></div>
+    <button class="btn sun" id="bAgain">🔁 Prøv igjen</button><button class="btn ghost" id="bBack">💬 Tilbake til glosene</button>`;
+  if(GQ.right>=6) confetti(25);
+  $("#bAgain").onclick=startGloseQuiz; $("#bBack").onclick=renderGloser; GQ=null;
 }
 
 /* ---------- innstillinger ---------- */

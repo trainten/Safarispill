@@ -14,3 +14,8 @@ eller Champions League. Streaken teller hvor mange dager på rad det er spilt.
 Øverst i `<script>` ligger `WEEK_CONTENT`, med én nøkkel per ISO-uke. Den inneholder bare temaer og egne
 spørsmål (første svaralternativ er riktig) og aldri detaljer fra ukeplaner. Spillet velger uka som passer med dagens dato.
 Under ⚙️ kan man velge en annen uke.
+
+## Ukens gloser
+Hver uke i `WEEK_CONTENT` kan ha `gloser: { tema, words:[{e, en, no}], phrases:[{en, no}] }`. Se `GLOSER_CLOTHES` for et eksempel.
+Da vises knappen «💬 Ukens gloser» på forsiden. Den gir en ordliste med 🔊, flashcards og en glosequiz med 8 spørsmål.
+Quizen gir poeng og stjerner, men påvirker ikke ligaen, streaken eller nivået.

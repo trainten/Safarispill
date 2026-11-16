@@ -121,6 +121,37 @@ table.glose .speak{width:44px;height:44px;margin:0}
 table.hist{width:100%;border-collapse:collapse;font-size:.88rem}
 table.hist td{padding:6px 4px;border-bottom:1px solid #eee3c8}
 .center{text-align:center}
+
+/* oppstilt addisjon */
+.addwrap{margin:2px 0 4px}
+.addhint{text-align:center;font-weight:700;font-size:1.02rem;min-height:2.5em;margin:8px 0 10px;color:var(--leaf);line-height:1.35}
+.addhint.bad{color:var(--clay)}
+.addgrid{display:grid;grid-template-columns:42px repeat(3,minmax(58px,1fr));gap:6px 8px;max-width:320px;margin:0 auto 14px;align-items:center;font-weight:800}
+.addlab{font-size:.68rem;color:var(--muted);text-align:center;font-weight:700;letter-spacing:.01em;line-height:1.15}
+.addlab.side{text-align:right;padding-right:2px;font-size:.72rem}
+.addn,.ansbox,.mentebox{display:flex;align-items:center;justify-content:center;height:54px;border-radius:12px;font-family:"Courier New",ui-monospace,monospace;font-size:2rem;font-weight:800}
+.addn{background:#fff;box-shadow:inset 0 0 0 2px #eadfc4}
+.addn.empty{background:transparent;box-shadow:none}
+.addop{font-size:2rem;text-align:center;line-height:1}
+.addline{grid-column:2/-1;height:0;border-top:3px solid var(--ink);margin:2px 0}
+.ansbox{background:#fff8e6;box-shadow:inset 0 0 0 2px #e6dcc2;min-height:58px}
+.ansbox.on,.mentebox.on{box-shadow:inset 0 0 0 3px var(--sun),0 0 0 3px #f2b13455;background:#fff3c4;animation:pulseOn 1.2s ease-in-out infinite}
+.ansbox.ok,.mentebox.ok{background:#dcf5e5;box-shadow:inset 0 0 0 2px var(--ok);animation:none}
+.ansbox.shake,.mentebox.shake{animation:shake .4s;background:#fde2e2;box-shadow:inset 0 0 0 2px var(--bad)}
+.mentebox{height:36px;font-size:1.2rem;background:#f4ecd6;box-shadow:inset 0 0 0 2px #d8ccb0}
+.mentebox.idle{opacity:.4}
+.addblank{height:36px}
+@keyframes pulseOn{50%{box-shadow:inset 0 0 0 3px var(--sun),0 0 0 6px #f2b13433}}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:320px;margin:0 auto}
+.numpad button{border:2px solid #e6dcc2;border-radius:16px;min-height:62px;font-size:1.65rem;font-weight:800;font-family:inherit;background:#fff;color:var(--ink);box-shadow:0 3px 0 #d8ccb0;cursor:pointer}
+.numpad button:active{transform:translateY(2px);box-shadow:0 1px 0 #d8ccb0}
+.numpad button:disabled{opacity:.4;cursor:default;transform:none}
+@media (max-height:700px){
+  .numpad button{min-height:52px;font-size:1.45rem}
+  .addn,.ansbox{height:46px;min-height:46px;font-size:1.7rem}
+  .mentebox{height:32px}
+}
 </style>
 </head>
 <body>
@@ -428,6 +459,106 @@ function oppstiltHTML(a,op,b){ return `<div class="oppstilt">${a}<br>${op} ${b}<
 function hasCarry(a,b){ while(a>0&&b>0){ if(a%10+b%10>=10) return true; a=Math.floor(a/10); b=Math.floor(b/10);} return false; }
 function hasBorrow(a,b){ while(b>0){ if(a%10<b%10) return true; a=Math.floor(a/10); b=Math.floor(b/10);} return false; }
 
+
+/* --- MATTE: oppstilt addisjon (siffer for siffer, med og uten mente) --- */
+function addCols(a,b){
+  const names=["enerne","tierne","hundrerne"], places=["enerplassen","tierplassen","hundrerplassen"];
+  const cols=[]; let cin=0;
+  for(let i=0;i<3;i++){
+    const da=Math.floor(a/Math.pow(10,i))%10, db=Math.floor(b/Math.pow(10,i))%10, sum=da+db+cin;
+    cols.push({place:i,a:da,b:db,cin,sum,digit:sum%10,cout:sum>=10?1:0,name:names[i],placeName:places[i]});
+    cin=cols[i].cout;
+  }
+  return cols;
+}
+function explainAddisjon(a,b){
+  const parts=addCols(a,b).map(c=>{
+    let t=`På ${c.placeName}: ${c.a} + ${c.b}`;
+    if(c.cin) t+=` + ${c.cin} i mente`;
+    t+=` = ${c.sum}`;
+    if(c.cout && c.place<2) t+=`. Skriv ${c.digit} og ta 1 i mente til ${addCols(a,b)[c.place+1].name}`;
+    else t+=`. Skriv ${c.digit}`;
+    return t;
+  });
+  return `${a} + ${b} = ${a+b}. ${parts.join(". ")}.`;
+}
+function makeOppstiltAddisjon(a,b){
+  if(!(a>=100 && a<=999 && b>=0 && b<=999 && a+b<=999)) return genOppstiltAddisjon(2);
+  const carry=hasCarry(a,b);
+  return { subj:"matte", topic: carry? "oppstilt addisjon (med mente)" : "oppstilt addisjon (uten mente)",
+    prompt:"Start med enerne!", answer:String(a+b), choices:[String(a+b)],
+    explain:explainAddisjon(a,b), visual:"", mode:"addisjon", a,b,carry, key:`addisjon|${a}+${b}` };
+}
+function genNoCarryAddends(L){
+  for(let t=0;t<80;t++){
+    const roll=Math.random(); let a,b;
+    if(roll<0.12){ a=ri(100,999); b=0; }
+    else if(roll<0.32){
+      const place=pick(L===1?[1,10]:[1,10,100,100]);
+      const maxD=place===100?8:9, d=ri(1,maxD);
+      b=d*place;
+      const ad=[ri(1,9),ri(0,9),ri(0,9)];
+      if(place===1) ad[2]=ri(0,9-d);
+      else if(place===10) ad[1]=ri(0,9-d);
+      else ad[0]=ri(1,Math.max(1,9-d));
+      a=ad[0]*100+ad[1]*10+ad[2];
+    } else {
+      const bLen=L===1? pick([1,1,2]) : pick([1,2,2,3]);
+      const ad=[ri(1,9),ri(0,9),ri(0,9)], bd=[0,0,0];
+      bd[2]=ri(0,9-ad[2]);
+      if(bLen>=2) bd[1]=ri(0,9-ad[1]);
+      if(bLen>=3) bd[0]=ri(0,9-ad[0]);
+      a=ad[0]*100+ad[1]*10+ad[2]; b=bd[0]*100+bd[1]*10+bd[2];
+      if(b===0) continue;
+    }
+    if(a>=100 && a<=999 && b>=0 && a+b<=999 && !hasCarry(a,b)) return [a,b];
+  }
+  return [177,22];
+}
+function genCarryAddends(L){
+  for(let t=0;t<120;t++){
+    const two=L>=4 && Math.random()<.5;
+    const bLen=L<=3? pick([1,2,2,3]) : pick([2,2,3,3]);
+    const ad=[ri(1,9),ri(0,9),ri(0,9)], bd=[0,0,0];
+    const forceOnes=two || Math.random()<.75;
+    if(forceOnes){ ad[2]=ri(1,9); bd[2]=ri(10-ad[2],9); }
+    else { ad[2]=ri(0,8); bd[2]=ri(0,9-ad[2]); }
+    const c1=ad[2]+bd[2]>=10?1:0;
+    if(bLen>=2){
+      if(two || !forceOnes){
+        const need=Math.max(0,10-c1);
+        ad[1]=ri(Math.min(9,Math.max(0,need-9)),9);
+        const lo=Math.max(0,10-ad[1]-c1);
+        if(lo>9) continue;
+        bd[1]=ri(lo,9);
+      } else { ad[1]=ri(0,9); bd[1]=ri(0,9); }
+    } else { bd[1]=0; }
+    const c2=ad[1]+bd[1]+c1>=10?1:0;
+    if(c2>9) continue;
+    if(bLen>=3){
+      if(9-c2<1) continue;
+      ad[0]=ri(1,9-c2); bd[0]=ri(0,9-ad[0]-c2);
+    } else {
+      bd[0]=0;
+      if(ad[0]+c2>9){ if(9-c2<1) continue; ad[0]=ri(1,9-c2); }
+    }
+    const a=ad[0]*100+ad[1]*10+ad[2], b=bd[0]*100+bd[1]*10+bd[2];
+    if(a>=100 && a<=999 && b>=0 && a+b<=999 && hasCarry(a,b)) return [a,b];
+  }
+  return [178,25];
+}
+function genOppstiltAddisjon(L, force){
+  let carry;
+  if(force===true) carry=true;
+  else if(force===false) carry=false;
+  else if(L<=2) carry=false;
+  else if(L===3) carry=Math.random()<.4;
+  else if(L===4) carry=Math.random()<.7;
+  else carry=Math.random()<.85;
+  const [a,b]= carry? genCarryAddends(L) : genNoCarryAddends(L);
+  return makeOppstiltAddisjon(a,b);
+}
+
 /* --- MATTE: addisjon og subtraksjon med tierovergang --- */
 function genRegning(L, forceOppstilt){
   const add = Math.random()<.5; let a,b, tries=0;
@@ -685,9 +816,10 @@ function genTekst(L){
 }
 function genMatte(L, opts={}){
   const w = W(); const focus = w && w.focus && w.focus.matte;
-  const pool = ["pm","pm","pm","plass","plass","plass","linje","linje","klokka","penger","tekst"];
-  if(focus==="regning"||focus==="oppstilt") pool.push("regning","regning");
+  const pool = ["pm","pm","pm","plass","plass","plass","linje","linje","klokka","penger","tekst","addisjon","addisjon"];
+  if(focus==="regning"||focus==="oppstilt") pool.push("regning","regning","addisjon","addisjon");
   const t = opts.topic || pick(pool);
+  if(t==="addisjon") return genOppstiltAddisjon(L);
   if(t==="pm") return genPlussMinus(L);
   if(t==="regning") return genRegning(L, focus==="oppstilt" && L>=2);
   if(t==="plass") return genPlassverdi(L);
@@ -798,7 +930,7 @@ function genDyr(){
    ØKT
    ===================================================================== */
 let G=null; // pågående økt
-function keyOf(q){ return q.prompt+"|"+q.answer; }
+function keyOf(q){ return q.key || (q.prompt+"|"+q.answer); }
 function buildSession(){
   const plan=shuffle(PLAN); const used=new Set(), usedTema=new Set(); const qs=[];
   for(const s of plan){
@@ -811,6 +943,15 @@ function buildSession(){
       else q=genDyr();
     } while(used.has(keyOf(q)) && tries<20);
     used.add(keyOf(q)); if(s==="tema") usedTema.add(q.prompt.replace(/<[^>]+>/g,"")); qs.push(q);
+  }
+  const focus = W() && W().focus && W().focus.matte;
+  const want = (focus==="oppstilt") ? 2 : 1;
+  let nAdd = qs.filter(q=>q.mode==="addisjon").length;
+  for(let i=0;i<qs.length && nAdd<want;i++){
+    if(qs[i].subj==="matte" && qs[i].mode!=="addisjon"){
+      const q=genOppstiltAddisjon(S.lvl.matte);
+      if(!used.has(keyOf(q))){ used.delete(keyOf(qs[i])); used.add(keyOf(q)); qs[i]=q; nAdd++; }
+    }
   }
   return qs;
 }
@@ -880,12 +1021,140 @@ function startSession(){
   G={ qs:buildSession(), i:0, results:[], points:0, combo:0, lvlMsgs:[], startLvl:{...S.lvl} };
   renderQuestion();
 }
+function addisjonHTML(q){
+  const showB=p=> p===0 || (p===1? q.b>=10 : q.b>=100);
+  const cell=(d,show)=> show? `<div class="addn">${d}</div>` : `<div class="addn empty"></div>`;
+  const dA=[Math.floor(q.a/100), Math.floor(q.a/10)%10, q.a%10];
+  const dB=[Math.floor(q.b/100), Math.floor(q.b/10)%10, q.b%10];
+  const mente = q.carry? `
+        <div class="addlab side">Mente</div>
+        <div class="mentebox idle" data-place="2" id="mente-2"></div>
+        <div class="mentebox idle" data-place="1" id="mente-1"></div>
+        <div class="addblank"></div>` : "";
+  return `
+      <div class="prompt">${esc(q.prompt)}</div>
+      <div class="center" style="margin-bottom:6px"><span class="badge">${q.carry? "Med mente":"Uten mente"}</span></div>
+      <div class="addwrap">
+        <div class="addhint" id="addHint">Skriv sifferet på enerplassen.</div>
+        <div class="addgrid">
+          <div></div>
+          <div class="addlab">Hundrere</div>
+          <div class="addlab">Tiere</div>
+          <div class="addlab">Enere</div>
+          ${mente}
+          <div></div>
+          ${cell(dA[0],true)}${cell(dA[1],true)}${cell(dA[2],true)}
+          <div class="addop">+</div>
+          ${cell(dB[0],showB(2))}${cell(dB[1],showB(1))}${cell(dB[2],true)}
+          <div class="addline"></div>
+          <div></div>
+          <div class="ansbox" data-place="2" id="ans-2"></div>
+          <div class="ansbox" data-place="1" id="ans-1"></div>
+          <div class="ansbox" data-place="0" id="ans-0"></div>
+        </div>
+        <div class="numpad" id="numpad">
+          ${[1,2,3,4,5,6,7,8,9].map(n=>`<button type="button" data-d="${n}" aria-label="${n}">${n}</button>`).join("")}
+          <span></span>
+          <button type="button" data-d="0" aria-label="0">0</button>
+          <span></span>
+        </div>
+      </div>`;
+}
+let ADD=null;
+function setAddHint(msg,bad){
+  const el=$("#addHint"); if(!el) return;
+  el.textContent=msg; el.classList.toggle("bad", !!bad);
+}
+function highlightAdd(){
+  app.querySelectorAll(".ansbox,.mentebox").forEach(el=>el.classList.remove("on"));
+  if(!ADD || ADD.done) return;
+  if(ADD.waitMente){
+    const el=$(`#mente-${ADD.step+1}`);
+    if(el){ el.classList.remove("idle"); el.classList.add("on"); }
+  } else {
+    const el=$(`#ans-${ADD.cols[ADD.step].place}`);
+    if(el) el.classList.add("on");
+  }
+}
+function missAdd(msg){
+  ADD.mistakes++; ADD.cellMiss=(ADD.cellMiss||0)+1;
+  setAddHint(msg,true); beep(false);
+  const el = ADD.waitMente? $(`#mente-${ADD.step+1}`) : $(`#ans-${ADD.cols[ADD.step].place}`);
+  if(el){ el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake"); setTimeout(()=>el.classList.remove("shake"),400); }
+}
+function tapAdd(d){
+  if(!ADD || ADD.done || !G || G.results.length>G.i) return;
+  const col=ADD.cols[ADD.step];
+  if(ADD.waitMente){
+    if(d===1){
+      const box=$(`#mente-${ADD.step+1}`);
+      box.textContent="1"; box.classList.remove("on","idle","shake"); box.classList.add("ok");
+      beep(true); ADD.waitMente=false; ADD.step++; ADD.cellMiss=0;
+      highlightAdd();
+      setAddHint(`Nå ${ADD.cols[ADD.step].name}! Husk menten!`);
+    } else {
+      const nxt=ADD.cols[ADD.step+1];
+      const c=col;
+      let msg="Når summen blir 10 eller mer, skriver du 1 i mente.";
+      if((ADD.cellMiss||0)>=1) msg=`${c.a} + ${c.b}${c.cin?` + ${c.cin}`:""} = ${c.sum}. Skriv 1 i mente til ${nxt.name}.`;
+      missAdd(msg);
+    }
+    return;
+  }
+  if(d===col.digit){
+    const box=$(`#ans-${col.place}`);
+    box.textContent=String(d); box.classList.remove("on","shake"); box.classList.add("ok");
+    beep(true); ADD.cellMiss=0;
+    if(col.cout && ADD.step<2){
+      ADD.waitMente=true; highlightAdd();
+      setAddHint(`Skriv 1 i mente til ${ADD.cols[ADD.step+1].name}!`);
+    } else if(ADD.step>=2){
+      finishAddisjon();
+    } else {
+      ADD.step++; highlightAdd();
+      const n=ADD.cols[ADD.step];
+      setAddHint(`Nå ${n.name}!${n.cin?" Husk menten!":""}`);
+    }
+  } else {
+    let msg = col.cin? `Hva blir ${col.a} + ${col.b} + ${col.cin}? Husk menten!` : `Hva blir ${col.a} + ${col.b}?`;
+    if((ADD.cellMiss||0)>=1){
+      msg = col.cout? `${col.a} + ${col.b}${col.cin?` + ${col.cin}`:""} = ${col.sum}. Skriv ${col.digit}, og ta 1 i mente.`
+                    : `${col.a} + ${col.b}${col.cin?` + ${col.cin}`:""} = ${col.sum}. Skriv ${col.digit}.`;
+    }
+    missAdd(msg);
+  }
+}
+function finishAddisjon(){
+  if(!ADD || ADD.done) return;
+  ADD.done=true; highlightAdd();
+  app.querySelectorAll("#numpad button").forEach(b=>b.disabled=true);
+  const ok=ADD.mistakes<=1;
+  setAddHint(ok? "Riktig! 🌟" : "Du klarte det!");
+  settleQuestion(ok);
+}
+function onAddKey(e){
+  if(!ADD || ADD.done) return;
+  if(e.key>="0" && e.key<="9"){ e.preventDefault(); tapAdd(+e.key); }
+}
+function bindAddisjon(q){
+  if(ADD && ADD.keyHandler) window.removeEventListener("keydown", ADD.keyHandler);
+  ADD={ q, cols:addCols(q.a,q.b), step:0, waitMente:false, mistakes:0, cellMiss:0, done:false, keyHandler:onAddKey };
+  highlightAdd();
+  app.querySelectorAll("#numpad button").forEach(b=>b.onclick=()=>tapAdd(+b.dataset.d));
+  window.addEventListener("keydown", onAddKey);
+}
+function unbindAddisjon(){
+  if(ADD && ADD.keyHandler) window.removeEventListener("keydown", ADD.keyHandler);
+  ADD=null;
+}
 function renderQuestion(){
+  unbindAddisjon();
   window.scrollTo(0,0);
   const q=G.qs[G.i]; const sj=SUBJ[q.subj];
   const right=G.results.filter(Boolean).length;
   const live = leagueFor(right + 0);
-  const wide = q.wide || q.choices.some(c=>c.length>16);
+  const isAdd = q.mode==="addisjon";
+  const wide = q.wide || (!isAdd && q.choices && q.choices.some(c=>c.length>16));
   app.innerHTML = `
     <div class="qtop">
       <span class="tag t-${q.subj}">${sj.icon} ${esc(sj.name)}${q.subj in S.lvl? " · nivå "+S.lvl[q.subj]:""}</span>
@@ -895,22 +1164,20 @@ function renderQuestion(){
     <div class="progress">${G.qs.map((_,k)=>`<i class="${k<G.i?(G.results[k]?"ok":"bad"):(k===G.i?"cur":"")}"></i>`).join("")}</div>
     <div class="card">
       <div class="small muted" style="margin-bottom:6px">${right} riktig${right===1?"":"e"} så langt · ${leagueHTML(live)}</div>
-      ${q.visual? `<div class="visual">${q.visual}</div>`:""}
+      ${isAdd? addisjonHTML(q) : `${q.visual? `<div class="visual">${q.visual}</div>`:""}
       <div class="prompt">${q.prompt} ${q.say && q.sayInPrompt? speakBtn(q.say):""}</div>
-      <div class="choices ${wide?"one":""}">${q.choices.map((c,k)=>`<button class="choice" data-k="${k}">${esc(c)}</button>`).join("")}</div>
+      <div class="choices ${wide?"one":""}">${q.choices.map((c,k)=>`<button class="choice" data-k="${k}">${esc(c)}</button>`).join("")}</div>`}
       <div id="fb"></div>
     </div>`;
-  app.querySelectorAll(".choice").forEach(b=>b.onclick=()=>answer(+b.dataset.k));
+  if(isAdd) bindAddisjon(q);
+  else app.querySelectorAll(".choice").forEach(b=>b.onclick=()=>answer(+b.dataset.k));
   bindSpeak();
-  $("#btnQuit").onclick=()=>{ if(confirm("Vil du avslutte safarien? Denne økta blir ikke lagret.")) renderHome(); };
+  $("#btnQuit").onclick=()=>{ if(confirm("Vil du avslutte safarien? Denne økta blir ikke lagret.")){ unbindAddisjon(); renderHome(); } };
 }
 function bindSpeak(){ app.querySelectorAll("[data-say]").forEach(b=>b.onclick=e=>{ e.stopPropagation(); speak(b.dataset.say); }); }
-function answer(k){
+function settleQuestion(ok){
   const q=G.qs[G.i]; if(G.results.length>G.i) return;
-  const ok = q.choices[k]===q.answer;
   G.results.push(ok); S.answered++; if(ok) S.correct++;
-  const btns=app.querySelectorAll(".choice");
-  btns.forEach((b,j)=>{ b.disabled=true; if(q.choices[j]===q.answer) b.classList.add("right"); else if(j===k) b.classList.add("wrong"); });
   let gained=0;
   if(ok){ G.combo++; gained = 10 + (q.subj in S.lvl ? 2*(S.lvl[q.subj]-1) : 0); if(G.combo%3===0) gained+=5; }
   else G.combo=0;
@@ -919,8 +1186,11 @@ function answer(k){
   save(); beep(ok);
   const cheers=["Mål! ⚽","Perfekt piruett! 💃","Rett i blinken! 🎯","Applaus! 👏","Som en filmstjerne! 🎬","Supert! 🌟"];
   const last = G.i===G.qs.length-1;
+  const failMsg = q.mode==="addisjon"
+    ? `Du klarte det til slutt! Riktig svar er <b>${esc(q.answer)}</b>.`
+    : `Ikke helt. Riktig svar: <b>${esc(q.answer)}</b>`;
   $("#fb").innerHTML = `<div class="feedback ${ok?"ok":"bad"}">
-      ${ok? `${pick(cheers)} <span class="muted">+${gained} poeng${G.combo>=3&&G.combo%3===0?" (3 på rad-bonus!)":""}</span>` : `Ikke helt. Riktig svar: <b>${esc(q.answer)}</b>`}
+      ${ok? `${pick(cheers)} <span class="muted">+${gained} poeng${G.combo>=3&&G.combo%3===0?" (3 på rad-bonus!)":""}</span>` : failMsg}
       ${q.explain? `<div class="small" style="margin-top:6px;font-weight:500">${esc(q.explain)}</div>`:""}
       ${q.say && !q.sayInPrompt? `<div style="margin-top:6px">Hør det på engelsk: ${speakBtn(q.say)}</div>`:""}
       ${lm? `<div style="margin-top:6px"><span class="badge">${esc(lm)}</span></div>`:""}
@@ -929,6 +1199,13 @@ function answer(k){
   bindSpeak();
   $("#btnNext").onclick=()=>{ G.i++; if(G.i>=G.qs.length) finishSession(); else renderQuestion(); };
   $("#btnNext").scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+function answer(k){
+  const q=G.qs[G.i]; if(G.results.length>G.i) return;
+  const ok = q.choices[k]===q.answer;
+  const btns=app.querySelectorAll(".choice");
+  btns.forEach((b,j)=>{ b.disabled=true; if(q.choices[j]===q.answer) b.classList.add("right"); else if(j===k) b.classList.add("wrong"); });
+  settleQuestion(ok);
 }
 function markPlayedToday(){
   const t=dayStr(); if(S.lastDay===t) return;
@@ -973,6 +1250,7 @@ function finishSession(){
   $("#btnAgain").onclick=startSession; $("#btnZoo").onclick=renderZoo; $("#btnHome").onclick=renderHome;
   window.scrollTo(0,0);
   if(opprykk || record || idx>=3 || unlocked.length) confetti(opprykk||record||idx===4 ? 60 : 25);
+  unbindAddisjon();
   G=null;
 }
 function confetti(n){ const box=$("#confetti"); const em=["⚽","💃","🎬","⭐","🎉","🦁","🏆","🩰"];
@@ -1098,8 +1376,8 @@ function renderSettings(){
   $("#btnHome").onclick=renderHome;
 }
 
-$("#btnSettings").onclick=()=>{ if(G && !confirm("Avslutte safarien?")) return; renderSettings(); };
-$("#homeTitle").onclick=()=>{ if(G && !confirm("Avslutte safarien?")) return; renderHome(); };
+$("#btnSettings").onclick=()=>{ if(G && !confirm("Avslutte safarien?")) return; unbindAddisjon(); renderSettings(); };
+$("#homeTitle").onclick=()=>{ if(G && !confirm("Avslutte safarien?")) return; unbindAddisjon(); renderHome(); };
 if("speechSynthesis" in window){ findVoice(); speechSynthesis.onvoiceschanged=findVoice; }
 renderHome();
 </script>

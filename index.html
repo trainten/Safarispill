@@ -188,6 +188,29 @@ const GLOSER_CLOTHES = {
   ]
 };
 
+const GLOSER_FOOD = {
+  tema: "Eat healthy! – sunn mat",
+  words: [
+    { e:"🍎", en:"apple",    no:"eple" },      { e:"🍌", en:"banana",   no:"banan" },
+    { e:"🥕", en:"carrot",   no:"gulrot" },    { e:"🥦", en:"broccoli", no:"brokkoli" },
+    { e:"🍅", en:"tomato",   no:"tomat" },     { e:"🥒", en:"cucumber", no:"agurk" },
+    { e:"🍇", en:"grapes",   no:"druer" },     { e:"🍊", en:"orange",   no:"appelsin" },
+    { e:"🐟", en:"fish",     no:"fisk" },      { e:"🥚", en:"egg",      no:"egg" },
+    { e:"🥛", en:"milk",     no:"melk" },      { e:"💧", en:"water",    no:"vann" },
+    { e:"🍞", en:"bread",    no:"brød" },      { e:"🧀", en:"cheese",   no:"ost" },
+    { e:"🍬", en:"sweets",   no:"godteri" },   { e:"🍰", en:"cake",     no:"kake" }
+  ],
+  phrases: [
+    { en:"Eat healthy!", no:"Spis sunt!" },
+    { en:"I like apples.", no:"Jeg liker epler." },
+    { en:"Fruit and vegetables are good for you.", no:"Frukt og grønnsaker er bra for deg." },
+    { en:"Can I have some water, please?", no:"Kan jeg få litt vann, takk?" },
+    { en:"I eat fish for dinner.", no:"Jeg spiser fisk til middag." },
+    { en:"Don't eat too many sweets!", no:"Ikke spis for mye godteri!" },
+    { en:"What is your favourite food?", no:"Hva er favorittmaten din?" }
+  ]
+};
+
 /* =====================================================================
    UKENS TEMA  –  bare temaer (ingen navn eller detaljer fra ukeplanen).
    Spørsmål: FØRSTE svaralternativ er riktig (stokkes i spillet).
@@ -244,6 +267,47 @@ const WEEK_CONTENT = {
       { tema:"Engelsk: clothes", prompt:"Hva heter «vinterjakke» på engelsk?", choices:["winter jacket","winter shoes","snow hat","cold dress"], explain:"jacket = jakke.", say:"winter jacket" },
       { tema:"Engelsk: clothes", prompt:"«She is wearing blue gloves.» Hva har hun på seg?", choices:["Blå hansker","Blå sokker","Blå støvler","Et blått skjerf"], explain:"gloves = hansker.", say:"She is wearing blue gloves." },
       { tema:"Sosialt: tenk på hva du sier", prompt:"Venninnen din bommet på straffesparket. Hva er snillest å si?", choices:["Godt forsøk! Du klarer det neste gang.","Du er dårlig i fotball.","Haha, så dårlig!","Ikke si noe og gå"], explain:"Gode ord gjør det lettere å prøve igjen. 💛" }
+    ]
+  },
+  48: {
+    label: "Uke 48",
+    topics: ["Matte: oppstilt subtraksjon med og uten veksling", "Norsk: vi dikter", "Naturfag: huden er et skjold – skorpa er hudens plaster",
+             "Engelsk: Eat healthy!", "KRLE: fortellinger fra kristendommen", "Kunst og håndverk: julehjerter og søm",
+             "Svømming: flyte og dykke", "Musikk: vi øver på julesanger", "Sosialt: jeg er flink til å øve"],
+    focus: { matte: "subtraksjon", engelsk: "food" },
+    gloser: GLOSER_FOOD,
+    questions: [
+      { tema:"Faktatekst: huden", text:"Huden er kroppens skjold. Den holder bakterier og skitt ute. Hvis du får et sår, lager kroppen en skorpe. Skorpa er som et plaster som kroppen lager selv. Under skorpa vokser det ny hud. Når såret har grodd, faller skorpa av av seg selv.",
+        prompt:"Hva lager kroppen når du får et sår?", choices:["En skorpe","En fjær","Et skjell","En negl"], explain:"Kroppen lager en skorpe over såret." },
+      { tema:"Faktatekst: huden", text:"Huden er kroppens skjold. Den holder bakterier og skitt ute. Hvis du får et sår, lager kroppen en skorpe. Skorpa er som et plaster som kroppen lager selv. Under skorpa vokser det ny hud. Når såret har grodd, faller skorpa av av seg selv.",
+        prompt:"Hva vokser det under skorpa?", choices:["Ny hud","Hår","Tenner","Gress"], explain:"Under skorpa lager kroppen ny hud." },
+      { tema:"Faktatekst: huden", text:"Huden er kroppens skjold. Den holder bakterier og skitt ute. Hvis du får et sår, lager kroppen en skorpe. Skorpa er som et plaster som kroppen lager selv. Under skorpa vokser det ny hud. Når såret har grodd, faller skorpa av av seg selv.",
+        prompt:"Hva skjer med skorpa når såret har grodd?", choices:["Den faller av av seg selv","Den blir blå","Den blir større og større","Den blir til et ekte plaster"], explain:"Når den nye huden er ferdig, faller skorpa av." },
+      { tema:"Naturfag: huden er et skjold", prompt:"Hvorfor bør du ikke pille av skorpa?", choices:["Da kan såret bli åpent og skittent igjen","Fordi den smaker godt","Fordi den vokser seg stor","Fordi den lyser i mørket"], explain:"Skorpa beskytter såret. Lar du den være, gror det fortere." },
+      { tema:"Naturfag: huden er et skjold", prompt:"Du har fått et skrubbsår på kneet. Hva er lurt å gjøre først?", choices:["Skylle såret med rent vann","Smøre på sjokolade","Leke i gjørma","Ikke gjøre noe"], explain:"Rent vann skyller bort skitt. Etterpå kan du sette på et plaster." },
+      { tema:"Matte: oppstilt subtraksjon", prompt:"Du regner 75 − 32 oppstilt. Hva regner du først?", choices:["5 − 2 på enerplassen","7 − 3 på tierplassen","75 + 32","32 − 75"], explain:"Start alltid med enerne: 5 − 2 = 3. Så tierne: 7 − 3 = 4. Svaret er 43." },
+      { tema:"Matte: oppstilt subtraksjon", prompt:"Må du veksle når du regner 86 − 43?", choices:["Nei, 6 − 3 går fint","Ja, 6 − 3 går ikke","Ja, du må alltid veksle","Nei, du skal legge sammen"], explain:"6 er større enn 3, så du trenger ikke veksle. 86 − 43 = 43." },
+      { tema:"Matte: oppstilt subtraksjon", prompt:"Må du veksle når du regner 64 − 28?", choices:["Ja, 4 − 8 går ikke","Nei, 4 − 8 går fint","Nei, du veksler aldri i minus","Ja, fordi 6 er større enn 2"], explain:"4 − 8 går ikke. Du veksler én tier om til ti enere: 14 − 8 = 6. 64 − 28 = 36." },
+      { tema:"Matte: oppstilt subtraksjon", prompt:"Du veksler én tier i tallet 53. Hvordan ser tallet ut etterpå?", choices:["4 tiere og 13 enere","5 tiere og 13 enere","4 tiere og 3 enere","3 tiere og 15 enere"], explain:"Én tier blir til ti enere: 5 tiere og 3 enere = 4 tiere og 13 enere." },
+      { tema:"Matte: oppstilt subtraksjon", prompt:"Hva er 342 − 128? Husk å veksle på enerplassen!", choices:["214","226","224","114"], explain:"2 − 8 går ikke. Veksle: 12 − 8 = 4, 3 − 2 = 1, 3 − 1 = 2. Svaret er 214." },
+      { tema:"Matte: oppstilt subtraksjon", prompt:"Hva er 765 − 432?", choices:["333","343","323","433"], explain:"Her trenger du ikke veksle: 5 − 2 = 3, 6 − 3 = 3, 7 − 4 = 3. Svaret er 333." },
+      { tema:"Matte: oppstilt subtraksjon", prompt:"Det er 92 seter på danseoppvisningen. 58 seter er opptatt. Hvor mange seter er ledige?", choices:["34","46","44","150"], explain:"92 − 58: 2 − 8 går ikke, så du veksler. 12 − 8 = 4 og 8 − 5 = 3. Svaret er 34." },
+      { tema:"Matte: oppstilt subtraksjon", prompt:"Hvordan kan du sjekke at 81 − 47 = 34 er riktig?", choices:["Regne 34 + 47 og se om du får 81","Regne 81 + 47","Regne 34 − 47","Gjette"], explain:"Pluss er motsatt av minus: 34 + 47 = 81. Da stemmer det!" },
+      { tema:"Norsk: vi dikter", prompt:"Hva er et dikt?", choices:["En kort tekst med linjer som ofte rimer","En oppskrift på kake","En faktatekst om dyr","En handleliste"], explain:"I et dikt leker vi med ord, og linjene rimer ofte." },
+      { tema:"Norsk: vi dikter", prompt:"Hvilket ord rimer på «sol»?", choices:["stol","sko","sang","sild"], explain:"sol – stol: slutten høres lik ut." },
+      { tema:"Norsk: vi dikter", prompt:"Hvilket ord rimer på «snø»?", choices:["sjø","sko","is","vinter"], explain:"snø – sjø: begge slutter på -ø." },
+      { tema:"Norsk: vi dikter", prompt:"Fullfør diktet: «Ute faller hvit, hvit snø, / isen legger seg på ...»", choices:["sjø","tak","vei","fjell"], explain:"snø rimer på sjø." },
+      { tema:"Engelsk: Eat healthy!", prompt:"«Eat healthy!» Hva betyr det?", choices:["Spis sunt!","Spis fort!","Spis mye godteri!","Drikk vann!"], explain:"eat = spis, healthy = sunn / sunt.", say:"Eat healthy!" },
+      { tema:"Engelsk: Eat healthy!", prompt:"«Which food is healthy?» Velg den sunne maten!", choices:["an apple","sweets","cake","crisps"], explain:"An apple = et eple. Frukt er sunt!", say:"Which food is healthy?" },
+      { tema:"Engelsk: Eat healthy!", prompt:"«I eat carrots and fish.» Hva spiser jeg?", choices:["Gulrøtter og fisk","Gulrøtter og kjøtt","Epler og fisk","Kake og fisk"], explain:"carrots = gulrøtter, fish = fisk.", say:"I eat carrots and fish." },
+      { tema:"KRLE: fortellinger fra kristendommen", prompt:"I juleevangeliet: Hvor ble Jesus født?", choices:["I en stall i Betlehem","I et slott i Roma","På en båt","Oppe i et tre"], explain:"Fortellingen sier at Jesus ble født i en stall og lagt i en krybbe." },
+      { tema:"KRLE: fortellinger fra kristendommen", prompt:"Hva fulgte de vise mennene for å finne Jesus?", choices:["En stjerne","En elv","Et kart","En hund"], explain:"De vise mennene fulgte en stjerne på himmelen." },
+      { tema:"Kunst og håndverk: julehjerter og søm", prompt:"Hvilke to farger har et klassisk flettet julehjerte?", choices:["Rødt og hvitt","Blått og gult","Svart og grønt","Lilla og brunt"], explain:"Det klassiske julehjertet flettes av rødt og hvitt papir." },
+      { tema:"Kunst og håndverk: julehjerter og søm", prompt:"Hva trenger du for å sy?", choices:["Nål og tråd","Saks og lim","Pensel og maling","Hammer og spiker"], explain:"Du trer tråden gjennom nåløyet og syr." },
+      { tema:"Svømming: flyte og dykke", prompt:"Hva hjelper deg å flyte på ryggen?", choices:["Ligge rolig og strekke ut armer og bein","Sparke så fort du kan","Krølle deg helt sammen","Løfte hodet høyt opp"], explain:"Når du ligger rolig og strak, holder vannet deg oppe." },
+      { tema:"Svømming: flyte og dykke", prompt:"Hva gjør du rett før du dykker under vannet?", choices:["Trekker pusten dypt","Spiser en is","Roper så høyt du kan","Puster ut all lufta"], explain:"Et dypt pust gir deg luft mens du er under vannet." },
+      { tema:"Sosialt: jeg er flink til å øve", prompt:"Du øver på en ny dans, og det går ikke helt ennå. Hva sier du til deg selv?", choices:["Jeg øver litt til, så klarer jeg det!","Jeg gir opp med en gang.","Jeg er dårligst av alle.","Dans er dumt."], explain:"Den som øver, blir flinkere og flinkere! 💃" },
+      { tema:"Musikk: vi øver på julesanger", prompt:"Hva er lurt når du skal lære en ny sang?", choices:["Øve litt hver dag","Bare synge den én gang","Glemme teksten","Synge med munnen lukket"], explain:"Litt øving hver dag gjør at du husker teksten og melodien. 🎵" }
     ]
   }
 };
@@ -560,8 +624,8 @@ function genOppstiltAddisjon(L, force){
 }
 
 /* --- MATTE: addisjon og subtraksjon med tierovergang --- */
-function genRegning(L, forceOppstilt){
-  const add = Math.random()<.5; let a,b, tries=0;
+function genRegning(L, forceOppstilt, subFocus){
+  const add = Math.random() < (subFocus ? .25 : .5); let a,b, tries=0;
   do{
     tries++;
     if(L===1){ if(add){ a=ri(5,9); b=ri(11-a,9);} else { a=ri(11,18); b=ri(a-9,9); } }
@@ -817,11 +881,11 @@ function genTekst(L){
 function genMatte(L, opts={}){
   const w = W(); const focus = w && w.focus && w.focus.matte;
   const pool = ["pm","pm","pm","plass","plass","plass","linje","linje","klokka","penger","tekst","addisjon","addisjon"];
-  if(focus==="regning"||focus==="oppstilt") pool.push("regning","regning","addisjon","addisjon");
+  if(focus==="regning"||focus==="oppstilt"||focus==="subtraksjon") pool.push("regning","regning","addisjon","addisjon");
   const t = opts.topic || pick(pool);
   if(t==="addisjon") return genOppstiltAddisjon(L);
   if(t==="pm") return genPlussMinus(L);
-  if(t==="regning") return genRegning(L, focus==="oppstilt" && L>=2);
+  if(t==="regning") return genRegning(L, (focus==="oppstilt"||focus==="subtraksjon") && L>=2, focus==="subtraksjon");
   if(t==="plass") return genPlassverdi(L);
   if(t==="linje") return genTallinje(L);
   if(t==="klokka") return genKlokke(L);
@@ -874,7 +938,7 @@ function pairQ(list, topic){ const p=pick(list); const toEn=Math.random()<.5; co
   return toEn ? mk("engelsk",topic,`Hva heter «${esc(p[1])}» på engelsk?`, p[0], wr.map(x=>x[0]), {say:p[0], explain:`${p[1]} = ${p[0]}`})
               : mk("engelsk",topic,`Hva betyr «${esc(p[0])}»?`, p[1], wr.map(x=>x[1]), {say:p[0], explain:`${p[0]} = ${p[1]}`, sayInPrompt:true}); }
 function genEngelsk(L){
-  const w=W(); const focusClothes = w && w.focus && w.focus.engelsk==="clothes";
+  const w=W(); const focusClothes = !!(w && w.focus && (w.focus.engelsk==="clothes" || (w.focus.engelsk && w.gloser)));
   const types = [["colors",1],["numbers",1],["animals",2],["body",2],["clothes",focusClothes?1:3],["hobby",3],["phrases",3],["sentences",4],["grammar",5]]
     .filter(t=>t[1]<=L).map(t=>t[0]);
   if(focusClothes) types.push("clothes");

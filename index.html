@@ -147,6 +147,16 @@ table.hist td{padding:6px 4px;border-bottom:1px solid #eee3c8}
 .numpad button{border:2px solid #e6dcc2;border-radius:16px;min-height:62px;font-size:1.65rem;font-weight:800;font-family:inherit;background:#fff;color:var(--ink);box-shadow:0 3px 0 #d8ccb0;cursor:pointer}
 .numpad button:active{transform:translateY(2px);box-shadow:0 1px 0 #d8ccb0}
 .numpad button:disabled{opacity:.4;cursor:default;transform:none}
+
+.addn.struck{text-decoration:line-through;opacity:.4}
+.vekslebtn{display:block;width:100%;max-width:320px;margin:8px auto 0;border:2px solid var(--sun);background:#fff3c4;border-radius:16px;padding:12px;font-size:1.05rem;font-weight:800;font-family:inherit;color:var(--ink);box-shadow:0 3px 0 #b27f12;cursor:pointer}
+.vekslebtn:active{transform:translateY(2px);box-shadow:0 1px 0 #b27f12}
+.vekslebtn[hidden]{display:none}
+.hjelpsetning{text-align:center;font-weight:700;font-size:1.02rem;margin:2px 0 10px;line-height:1.5;color:var(--ink)}
+.hjelpsetning .hj{display:inline-block;min-width:1.35em;padding:0 5px;border-bottom:2px solid var(--ink);text-align:center}
+.hjelpsetning .hj.ok{background:#dcf5e5;border-radius:6px;border-bottom-color:var(--ok)}
+.missrow{display:flex;gap:8px;justify-content:center;margin:8px auto 14px;max-width:320px}
+.missrow .ansbox{width:64px}
 @media (max-height:700px){
   .numpad button{min-height:52px;font-size:1.45rem}
   .addn,.ansbox{height:46px;min-height:46px;font-size:1.7rem}
@@ -308,6 +318,23 @@ const WEEK_CONTENT = {
       { tema:"Svømming: flyte og dykke", prompt:"Hva gjør du rett før du dykker under vannet?", choices:["Trekker pusten dypt","Spiser en is","Roper så høyt du kan","Puster ut all lufta"], explain:"Et dypt pust gir deg luft mens du er under vannet." },
       { tema:"Sosialt: jeg er flink til å øve", prompt:"Du øver på en ny dans, og det går ikke helt ennå. Hva sier du til deg selv?", choices:["Jeg øver litt til, så klarer jeg det!","Jeg gir opp med en gang.","Jeg er dårligst av alle.","Dans er dumt."], explain:"Den som øver, blir flinkere og flinkere! 💃" },
       { tema:"Musikk: vi øver på julesanger", prompt:"Hva er lurt når du skal lære en ny sang?", choices:["Øve litt hver dag","Bare synge den én gang","Glemme teksten","Synge med munnen lukket"], explain:"Litt øving hver dag gjør at du husker teksten og melodien. 🎵" }
+    ]
+  },
+  49: {
+    label: "Uke 49",
+    topics: ["Matte: tresifret oppstilt subtraksjon", "Matte: hvilket tall mangler?", "Matte: tekstoppgaver med «hvor mange flere»"],
+    focus: { matte: "tresifret" },
+    questions: [
+      { tema:"Matte: oppstilt subtraksjon", prompt:"Du regner 365 − 142 oppstilt. Hva regner du først?", choices:["5 − 2 på enerplassen","3 − 1 på hundrerplassen","142 − 365","3 + 1"], explain:"Start alltid med enerne, til høyre: 5 − 2 = 3. Så tierne og til slutt hundrerne." },
+      { tema:"Matte: oppstilt subtraksjon", prompt:"Må du veksle når du regner 487 − 251?", choices:["Nei, hvert siffer er stort nok","Ja, du må alltid veksle i minus","Ja, 7 − 1 går ikke","Nei, du skal legge sammen"], explain:"7 − 1, 8 − 5 og 4 − 2 går alle fint. 487 − 251 = 236." },
+      { tema:"Matte: oppstilt subtraksjon", prompt:"Må du veksle når du regner 753 − 219?", choices:["Ja, 3 − 9 går ikke","Nei, 3 − 9 går fint","Nei, du veksler bare i pluss","Ja, fordi 7 er større enn 2"], explain:"3 − 9 går ikke. Du veksler én tier om til ti enere: 13 − 9 = 4. 753 − 219 = 534." },
+      { tema:"Matte: oppstilt subtraksjon", prompt:"Du veksler én tier i tallet 546. Hvordan ser tallet ut etterpå?", choices:["5 hundrere, 3 tiere og 16 enere","5 hundrere, 4 tiere og 16 enere","4 hundrere, 4 tiere og 16 enere","5 hundrere, 3 tiere og 6 enere"], explain:"Én tier blir til ti enere: 5 hundrere, 4 tiere og 6 enere = 5 hundrere, 3 tiere og 16 enere." },
+      { tema:"Matte: plassverdi", prompt:"«Det er 4 hundrere, 1 tier og 8 enere igjen.» Hvilket tall er det?", choices:["418","481","148","814"], explain:"4 hundrere, 1 tier og 8 enere er tallet 418." },
+      { tema:"Matte: hvilket tall mangler?", prompt:"Hvilket tall mangler? 725 − ? = 525", choices:["200","100","20","525"], explain:"725 − 525 = 200, så det er 200 som mangler." },
+      { tema:"Matte: hvilket tall mangler?", prompt:"Hvilket tall mangler? 900 − ? = 899", choices:["1","10","100","899"], explain:"900 − 899 = 1. Det mangler bare 1." },
+      { tema:"Matte: tekstoppgave", prompt:"Sjiraffen fikk 458 poeng, og sebraen fikk 236 poeng. Hvilket regnestykke viser hvor mange flere poeng sjiraffen fikk?", choices:["458 − 236","458 + 236","236 − 458","458 − 458"], explain:"«Hvor mange flere» finner du ved å trekke det minste tallet fra det største." },
+      { tema:"Matte: tekstoppgave", prompt:"Elefanten bar 679 kilo frukt, og neshornet bar 354 kilo. Hvor mange kilo mer bar elefanten?", choices:["325","323","333","1033"], explain:"679 − 354 = 325." },
+      { tema:"Matte: oppstilt subtraksjon", prompt:"Hvordan kan du sjekke at 578 − 245 = 333 er riktig?", choices:["Regne 333 + 245 og se om du får 578","Regne 578 + 245","Regne 333 − 245","Gjette"], explain:"Pluss er motsatt av minus: 333 + 245 = 578. Da stemmer det!" }
     ]
   }
 };
@@ -623,6 +650,118 @@ function genOppstiltAddisjon(L, force){
   return makeOppstiltAddisjon(a,b);
 }
 
+/* --- MATTE: oppstilt subtraksjon (siffer for siffer, med og uten veksling) --- */
+const SUB_UTEN = [[365,142],[487,251],[758,326],[596,170],[829,504],[673,210],[948,615],[574,331]];
+const SUB_MED  = [[546,128],[753,219],[684,357],[835,416]];
+const MANGLER_LETT = [
+  {a:634, missing:200, result:434}, {a:634, missing:34, result:600},
+  {a:900, missing:1, result:899},   {a:900, missing:450, result:450},
+  {a:725, missing:20, result:705},  {a:516, missing:300, result:216},
+  {a:408, missing:8, result:400}
+];
+const MANGLER_MER = [
+  {a:800, missing:101, result:699}, {a:800, missing:480, result:320},
+  {a:350, missing:101, result:249}
+];
+const TEKST_SUB = [
+  {a:386,b:154, prompt:"🦁 Løven fikk 386 poeng, og 🦓 sebraen fikk 154 poeng. Hvor mange flere poeng fikk løven?", explain:"386 − 154 = 232. Løven fikk 232 poeng mer."},
+  {a:547,b:325, prompt:"🐘 Elefanten plukket 547 blader, og 🦒 sjiraffen plukket 325. Hvor mange flere blader plukket elefanten?", explain:"547 − 325 = 222. Elefanten plukket 222 blader mer."},
+  {a:468,b:235, prompt:"🦩 Det var 468 flamingoer ved vannhullet. 235 fløy av gårde. Hvor mange flamingoer er igjen?", explain:"468 − 235 = 233. Det er 233 flamingoer igjen."},
+  {a:583,b:261, prompt:"🐧 Pingvinene fisket 583 fisk, og 🦦 oterne fisket 261. Hvor mange flere fisk fikk pingvinene?", explain:"583 − 261 = 322. Pingvinene fikk 322 fisk mer."},
+  {a:397,b:154, prompt:"🦊 Reven samlet 397 bær, og 🦔 pinnsvinet samlet 154. Hvor mange flere bær samlet reven?", explain:"397 − 154 = 243. Reven samlet 243 bær mer."},
+  {a:578,b:245, prompt:"🦒 Sjiraffen løp 578 meter, og 🦓 sebraen løp 245 meter. Hvor mange meter lenger løp sjiraffen?", explain:"578 − 245 = 333. Sjiraffen løp 333 meter lenger."},
+  {a:562,b:238, prompt:"🦁 Løven fikk 562 poeng, og 🐯 tigeren fikk 238 poeng. Hvor mange flere poeng fikk løven?", explain:"562 − 238 = 324. 2 − 8 går ikke, så du veksler: 12 − 8 = 4. Løven fikk 324 poeng mer."},
+  {a:645,b:217, prompt:"🐢 Skilpadden gikk 645 skritt, og 🐨 koalaen gikk 217. Hvor mange skritt lenger gikk skilpadden?", explain:"645 − 217 = 428. 5 − 7 går ikke, så du veksler: 15 − 7 = 8. Skilpadden gikk 428 skritt lenger."}
+];
+function isSimpleBorrow(a,b){
+  const ao=a%10, bo=b%10, at=Math.floor(a/10)%10, bt=Math.floor(b/10)%10, ah=Math.floor(a/100), bh=Math.floor(b/100);
+  return ao<bo && at>=1 && (at-1)>=bt && ah>=bh;
+}
+function subCols(a,b){
+  const names=["enerne","tierne","hundrerne"], places=["enerplassen","tierplassen","hundrerplassen"];
+  const A=[a%10, Math.floor(a/10)%10, Math.floor(a/100)%10];
+  const B=[b%10, Math.floor(b/10)%10, Math.floor(b/100)%10];
+  const work=A.slice(), cols=[];
+  for(let i=0;i<3;i++){
+    const shown=work[i], db=B[i], needBorrow=shown<db;
+    if(needBorrow){ work[i+1]-=1; work[i]+=10; }
+    const used=work[i], digit=used-db;
+    cols.push({place:i, a:A[i], b:db, shown, needBorrow, used, digit,
+      newNeighbor: needBorrow? work[i+1] : null,
+      fromUnit: i===0? "tier" : "hundrer",
+      name:names[i], placeName:places[i]});
+  }
+  return cols;
+}
+function hjelpSetning(n){
+  const h=Math.floor(n/100), t=Math.floor(n/10)%10, o=n%10;
+  return grammar(`Det er ${h} hundrere, ${t} tiere og ${o} enere igjen`);
+}
+function hjelpHTML(h,t,o){
+  const box=(v,id)=> v==null? `<span class="hj" id="${id}">_</span>` : `<span class="hj ok" id="${id}">${v}</span>`;
+  let s=`Det er ${box(h,"hj-h")} hundrere, ${box(t,"hj-t")} tiere og ${box(o,"hj-o")} enere igjen.`;
+  if(h===1) s=s.replace(" hundrere"," hundrer");
+  if(t===1) s=s.replace(" tiere"," tier");
+  if(o===1) s=s.replace(" enere"," ener");
+  return s;
+}
+function explainSubtraksjon(a,b){
+  const parts=subCols(a,b).map(c=> c.needBorrow
+    ? `På ${c.placeName}: ${c.shown} − ${c.b} går ikke. Veksle: ${c.used} − ${c.b} = ${c.digit}. Skriv ${c.digit}`
+    : `På ${c.placeName}: ${c.shown} − ${c.b} = ${c.digit}. Skriv ${c.digit}`);
+  const ans=a-b;
+  return `${a} − ${b} = ${ans}. ${parts.join(". ")}. ${hjelpSetning(ans)}.`;
+}
+function makeOppstiltSubtraksjon(a,b,story,extraExplain){
+  if(!(a>=100 && a<=999 && b>=0 && b<a && a-b>=0)) return genOppstiltSubtraksjon(2,false);
+  const borrow=hasBorrow(a,b);
+  if(borrow && !isSimpleBorrow(a,b)) return genOppstiltSubtraksjon(2,true);
+  const ans=a-b;
+  return { subj:"matte",
+    topic: borrow? "oppstilt subtraksjon (med veksling)" : "oppstilt subtraksjon (uten veksling)",
+    prompt: story || "Start med enerne!",
+    answer:String(ans), choices:[String(ans)],
+    explain: extraExplain? extraExplain+" "+explainSubtraksjon(a,b) : explainSubtraksjon(a,b),
+    visual:"", mode:"subtraksjon", a,b,borrow, story:story||"",
+    key:`subtraksjon|${a}-${b}|${story?1:0}` };
+}
+function pickUnusedPair(pool, used, storyFlag){
+  const fresh=pool.filter(([a,b])=>!used || !used.has(`subtraksjon|${a}-${b}|${storyFlag?1:0}`));
+  return pick(fresh.length?fresh:pool);
+}
+function genOppstiltSubtraksjon(L, force, used){
+  let borrow;
+  if(force===true) borrow=true;
+  else if(force===false) borrow=false;
+  else if(L<=2) borrow=false;
+  else if(L===3) borrow=Math.random()<.35;
+  else borrow=Math.random()<.55;
+  const [a,b]=pickUnusedPair(borrow?SUB_MED:SUB_UTEN, used, false);
+  return makeOppstiltSubtraksjon(a,b);
+}
+function makeManglerTall(item){
+  const ans=item.missing, result=item.result, a=item.a;
+  const explain=`${a} − ${ans} = ${result}, så tallet som mangler er ${ans}.`;
+  return { subj:"matte", topic:"hvilket tall mangler",
+    prompt:"Hvilket tall mangler?", answer:String(ans), choices:[String(ans)],
+    explain, visual:"", mode:"mangler", a, result, missing:ans,
+    key:`mangler|${a}-${ans}=${result}` };
+}
+function genManglerTall(L, used){
+  const pool = L<=2? MANGLER_LETT : MANGLER_LETT.concat(MANGLER_MER);
+  const fresh=pool.filter(it=>!used || !used.has(`mangler|${it.a}-${it.missing}=${it.result}`));
+  return makeManglerTall(pick(fresh.length?fresh:pool));
+}
+function genTekstSubtraksjon(L, used){
+  const hard=TEKST_SUB.filter(t=>hasBorrow(t.a,t.b));
+  const easy=TEKST_SUB.filter(t=>!hasBorrow(t.a,t.b));
+  const pool = (L>=3? TEKST_SUB : easy);
+  const fresh=pool.filter(t=>!used || !used.has(`subtraksjon|${t.a}-${t.b}|1`));
+  const t=pick(fresh.length?fresh:pool);
+  return makeOppstiltSubtraksjon(t.a,t.b,t.prompt,t.explain);
+}
+
+
 /* --- MATTE: addisjon og subtraksjon med tierovergang --- */
 function genRegning(L, forceOppstilt, subFocus){
   const add = Math.random() < (subFocus ? .25 : .5); let a,b, tries=0;
@@ -882,6 +1021,12 @@ function genMatte(L, opts={}){
   const w = W(); const focus = w && w.focus && w.focus.matte;
   const pool = ["pm","pm","pm","plass","plass","plass","linje","linje","klokka","penger","tekst","addisjon","addisjon"];
   if(focus==="regning"||focus==="oppstilt"||focus==="subtraksjon") pool.push("regning","regning","addisjon","addisjon");
+  if(focus==="tresifret"){
+    const t = opts.topic || pick(["subtraksjon","subtraksjon","subtraksjon","mangler","mangler","tekstsub","tekstsub"]);
+    if(t==="subtraksjon") return genOppstiltSubtraksjon(L);
+    if(t==="mangler") return genManglerTall(L);
+    return genTekstSubtraksjon(L);
+  }
   const t = opts.topic || pick(pool);
   if(t==="addisjon") return genOppstiltAddisjon(L);
   if(t==="pm") return genPlussMinus(L);
@@ -1009,12 +1154,28 @@ function buildSession(){
     used.add(keyOf(q)); if(s==="tema") usedTema.add(q.prompt.replace(/<[^>]+>/g,"")); qs.push(q);
   }
   const focus = W() && W().focus && W().focus.matte;
-  const want = (focus==="oppstilt") ? 2 : 1;
-  let nAdd = qs.filter(q=>q.mode==="addisjon").length;
-  for(let i=0;i<qs.length && nAdd<want;i++){
-    if(qs[i].subj==="matte" && qs[i].mode!=="addisjon"){
-      const q=genOppstiltAddisjon(S.lvl.matte);
-      if(!used.has(keyOf(q))){ used.delete(keyOf(qs[i])); used.add(keyOf(q)); qs[i]=q; nAdd++; }
+  if(focus==="tresifret"){
+    const L=S.lvl.matte;
+    const needed=[
+      genOppstiltSubtraksjon(L,false,used),
+      genOppstiltSubtraksjon(L, L>=3, used),
+      genManglerTall(L,used),
+      genTekstSubtraksjon(L,used)
+    ];
+    let mi=0;
+    for(let i=0;i<qs.length && mi<needed.length;i++){
+      if(qs[i].subj==="matte"){
+        used.delete(keyOf(qs[i])); used.add(keyOf(needed[mi])); qs[i]=needed[mi]; mi++;
+      }
+    }
+  } else {
+    const want = (focus==="oppstilt") ? 2 : 1;
+    let nAdd = qs.filter(q=>q.mode==="addisjon").length;
+    for(let i=0;i<qs.length && nAdd<want;i++){
+      if(qs[i].subj==="matte" && qs[i].mode!=="addisjon"){
+        const q=genOppstiltAddisjon(S.lvl.matte);
+        if(!used.has(keyOf(q))){ used.delete(keyOf(qs[i])); used.add(keyOf(q)); qs[i]=q; nAdd++; }
+      }
     }
   }
   return qs;
@@ -1210,7 +1371,227 @@ function bindAddisjon(q){
 function unbindAddisjon(){
   if(ADD && ADD.keyHandler) window.removeEventListener("keydown", ADD.keyHandler);
   ADD=null;
+  if(SUB && SUB.keyHandler) window.removeEventListener("keydown", SUB.keyHandler);
+  SUB=null;
+  if(MISS && MISS.keyHandler) window.removeEventListener("keydown", MISS.keyHandler);
+  MISS=null;
 }
+let SUB=null, MISS=null;
+function subtraksjonHTML(q){
+  const showB=p=> p===0 || (p===1? q.b>=10 : q.b>=100);
+  const cell=(d,show,id)=> show? `<div class="addn" id="${id}">${d}</div>` : `<div class="addn empty" id="${id}"></div>`;
+  const dA=[Math.floor(q.a/100), Math.floor(q.a/10)%10, q.a%10];
+  const dB=[Math.floor(q.b/100), Math.floor(q.b/10)%10, q.b%10];
+  const veksle = q.borrow? `
+        <div class="addlab side">Veksling</div>
+        <div class="mentebox idle" data-place="2" id="borrow-2"></div>
+        <div class="mentebox idle" data-place="1" id="borrow-1"></div>
+        <div class="mentebox idle" data-place="0" id="borrow-0"></div>` : "";
+  return `
+      <div class="prompt">${esc(q.prompt)}</div>
+      <div class="center" style="margin-bottom:6px"><span class="badge">${q.borrow? "Med veksling":"Uten veksling"}</span></div>
+      <div class="addwrap">
+        <div class="addhint" id="addHint">Skriv sifferet på enerplassen.</div>
+        <div class="addgrid">
+          <div></div>
+          <div class="addlab">Hundrere</div>
+          <div class="addlab">Tiere</div>
+          <div class="addlab">Enere</div>
+          ${veksle}
+          <div></div>
+          ${cell(dA[0],true,"top-2")}${cell(dA[1],true,"top-1")}${cell(dA[2],true,"top-0")}
+          <div class="addop">−</div>
+          ${cell(dB[0],showB(2),"bot-2")}${cell(dB[1],showB(1),"bot-1")}${cell(dB[2],true,"bot-0")}
+          <div class="addline"></div>
+          <div></div>
+          <div class="ansbox" data-place="2" id="ans-2"></div>
+          <div class="ansbox" data-place="1" id="ans-1"></div>
+          <div class="ansbox" data-place="0" id="ans-0"></div>
+        </div>
+        <div class="hjelpsetning" id="hjelpLinje">${hjelpHTML(null,null,null)}</div>
+        <div class="numpad" id="numpad">
+          ${[1,2,3,4,5,6,7,8,9].map(n=>`<button type="button" data-d="${n}" aria-label="${n}">${n}</button>`).join("")}
+          <span></span>
+          <button type="button" data-d="0" aria-label="0">0</button>
+          <span></span>
+        </div>
+        <button type="button" class="vekslebtn" id="btnVeksle" hidden>Veksle ⇄</button>
+      </div>`;
+}
+function updateHjelp(){
+  if(!SUB) return;
+  const el=$("#hjelpLinje"); if(!el) return;
+  const got={};
+  for(const c of SUB.cols){
+    const box=$(`#ans-${c.place}`);
+    if(box && box.textContent!=="") got[c.place]=+box.textContent;
+  }
+  el.innerHTML=hjelpHTML(got[2], got[1], got[0]);
+}
+function highlightSub(){
+  app.querySelectorAll(".ansbox").forEach(el=>el.classList.remove("on"));
+  const btn=$("#btnVeksle");
+  if(!SUB || SUB.done){ if(btn) btn.hidden=true; return; }
+  const col=SUB.cols[SUB.step];
+  if(SUB.waitVeksle){
+    if(btn){ btn.hidden=false; btn.textContent = `Veksle én ${col.fromUnit} ⇄`; }
+  } else {
+    if(btn) btn.hidden=true;
+    const el=$(`#ans-${col.place}`);
+    if(el) el.classList.add("on");
+  }
+}
+function missSub(msg){
+  SUB.mistakes++; SUB.cellMiss=(SUB.cellMiss||0)+1;
+  setAddHint(msg,true); beep(false);
+  const el=$(`#ans-${SUB.cols[SUB.step].place}`);
+  if(el){ el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake"); setTimeout(()=>el.classList.remove("shake"),400); }
+}
+function doVeksle(){
+  if(!SUB || SUB.done || !SUB.waitVeksle) return;
+  const col=SUB.cols[SUB.step];
+  const src=col.place+1;
+  const top=$(`#top-${src}`); if(top) top.classList.add("struck");
+  const bNext=$(`#borrow-${src}`);
+  if(bNext){ bNext.textContent=String(col.newNeighbor); bNext.classList.remove("idle","on"); bNext.classList.add("ok"); }
+  const bCur=$(`#borrow-${col.place}`);
+  if(bCur){ bCur.textContent="1"; bCur.classList.remove("idle","on"); bCur.classList.add("ok"); }
+  beep(true); SUB.waitVeksle=false; SUB.cellMiss=0;
+  highlightSub();
+  setAddHint(`Nå har du ${col.used} ${col.name}. Hva er ${col.used} − ${col.b}?`);
+}
+function tapSub(d){
+  if(!SUB || SUB.done || !G || G.results.length>G.i) return;
+  const col=SUB.cols[SUB.step];
+  if(SUB.waitVeksle){
+    let msg=`${col.shown} − ${col.b} går ikke. Veksle én ${col.fromUnit} først!`;
+    if((SUB.cellMiss||0)>=1) msg=`Trykk på knappen «Veksle én ${col.fromUnit}». Da blir det ${col.used} − ${col.b}.`;
+    missSub(msg);
+    return;
+  }
+  if(d===col.digit){
+    const box=$(`#ans-${col.place}`);
+    box.textContent=String(d); box.classList.remove("on","shake"); box.classList.add("ok");
+    beep(true); SUB.cellMiss=0; updateHjelp();
+    if(SUB.step>=2){
+      finishSubtraksjon();
+    } else {
+      SUB.step++;
+      const n=SUB.cols[SUB.step];
+      if(n.needBorrow){
+        SUB.waitVeksle=true; highlightSub();
+        setAddHint(`${n.shown} − ${n.b} går ikke. Veksle én ${n.fromUnit}!`);
+      } else {
+        highlightSub();
+        setAddHint(`Nå ${n.name}! Hva er ${n.shown} − ${n.b}?`);
+      }
+    }
+  } else {
+    let msg = col.needBorrow? `Hva er ${col.used} − ${col.b}?` : `Hva er ${col.shown} − ${col.b}?`;
+    if((SUB.cellMiss||0)>=1){
+      msg = col.needBorrow
+        ? `${col.used} − ${col.b} = ${col.digit}. Skriv ${col.digit}.`
+        : `${col.shown} − ${col.b} = ${col.digit}. Skriv ${col.digit}.`;
+    }
+    missSub(msg);
+  }
+}
+function finishSubtraksjon(){
+  if(!SUB || SUB.done) return;
+  SUB.done=true; highlightSub();
+  app.querySelectorAll("#numpad button").forEach(b=>b.disabled=true);
+  const ok=SUB.mistakes<=1;
+  setAddHint(ok? "Riktig! 🌟" : "Du klarte det!");
+  settleQuestion(ok);
+}
+function onSubKey(e){
+  if(!SUB || SUB.done) return;
+  if(e.key>="0" && e.key<="9"){ e.preventDefault(); tapSub(+e.key); }
+}
+function bindSubtraksjon(q){
+  if(SUB && SUB.keyHandler) window.removeEventListener("keydown", SUB.keyHandler);
+  const cols=subCols(q.a,q.b);
+  SUB={ q, cols, step:0, waitVeksle:!!cols[0].needBorrow, mistakes:0, cellMiss:0, done:false, keyHandler:onSubKey };
+  if(SUB.waitVeksle){
+    const c=cols[0];
+    setAddHint(`${c.shown} − ${c.b} går ikke. Veksle én ${c.fromUnit}!`);
+  }
+  highlightSub();
+  app.querySelectorAll("#numpad button").forEach(b=>b.onclick=()=>tapSub(+b.dataset.d));
+  const vb=$("#btnVeksle"); if(vb) vb.onclick=doVeksle;
+  window.addEventListener("keydown", onSubKey);
+}
+function manglerHTML(q){
+  const digits=String(q.answer);
+  const boxes=digits.split("").map((_,i)=>`<div class="ansbox" id="miss-${i}"></div>`).join("");
+  return `
+      <div class="prompt">${esc(q.prompt)}</div>
+      <div class="center" style="margin-bottom:8px">
+        <div class="oppstilt" style="font-size:1.8rem;text-align:center">${q.a} − <span style="color:#c8642c">?</span> = ${q.result}</div>
+      </div>
+      <div class="addwrap">
+        <div class="addhint" id="addHint">Skriv tallet som mangler, fra venstre.</div>
+        <div class="missrow">${boxes}</div>
+        <div class="numpad" id="numpad">
+          ${[1,2,3,4,5,6,7,8,9].map(n=>`<button type="button" data-d="${n}" aria-label="${n}">${n}</button>`).join("")}
+          <span></span>
+          <button type="button" data-d="0" aria-label="0">0</button>
+          <span></span>
+        </div>
+      </div>`;
+}
+function highlightMiss(){
+  app.querySelectorAll(".ansbox").forEach(el=>el.classList.remove("on"));
+  if(!MISS || MISS.done) return;
+  const el=$(`#miss-${MISS.step}`);
+  if(el) el.classList.add("on");
+}
+function missMiss(msg){
+  MISS.mistakes++; MISS.cellMiss=(MISS.cellMiss||0)+1;
+  setAddHint(msg,true); beep(false);
+  const el=$(`#miss-${MISS.step}`);
+  if(el){ el.classList.remove("shake"); void el.offsetWidth; el.classList.add("shake"); setTimeout(()=>el.classList.remove("shake"),400); }
+}
+function tapMiss(d){
+  if(!MISS || MISS.done || !G || G.results.length>G.i) return;
+  const want=+MISS.digits[MISS.step];
+  if(d===want){
+    const box=$(`#miss-${MISS.step}`);
+    box.textContent=String(d); box.classList.remove("on","shake"); box.classList.add("ok");
+    beep(true); MISS.cellMiss=0;
+    if(MISS.step>=MISS.digits.length-1){
+      finishMangler();
+    } else {
+      MISS.step++; highlightMiss();
+      setAddHint("Neste siffer!");
+    }
+  } else {
+    let msg="Prøv et annet siffer.";
+    if((MISS.cellMiss||0)>=1) msg=`Tallet som mangler er ${MISS.q.answer}. Skriv ${want}.`;
+    else if(MISS.step===0) msg=`Hva er ${MISS.q.a} − ${MISS.q.result}?`;
+    missMiss(msg);
+  }
+}
+function finishMangler(){
+  if(!MISS || MISS.done) return;
+  MISS.done=true; highlightMiss();
+  app.querySelectorAll("#numpad button").forEach(b=>b.disabled=true);
+  const ok=MISS.mistakes<=1;
+  setAddHint(ok? "Riktig! 🌟" : "Du klarte det!");
+  settleQuestion(ok);
+}
+function onMissKey(e){
+  if(!MISS || MISS.done) return;
+  if(e.key>="0" && e.key<="9"){ e.preventDefault(); tapMiss(+e.key); }
+}
+function bindMangler(q){
+  if(MISS && MISS.keyHandler) window.removeEventListener("keydown", MISS.keyHandler);
+  MISS={ q, digits:String(q.answer), step:0, mistakes:0, cellMiss:0, done:false, keyHandler:onMissKey };
+  highlightMiss();
+  app.querySelectorAll("#numpad button").forEach(b=>b.onclick=()=>tapMiss(+b.dataset.d));
+  window.addEventListener("keydown", onMissKey);
+}
+
 function renderQuestion(){
   unbindAddisjon();
   window.scrollTo(0,0);
@@ -1218,7 +1599,11 @@ function renderQuestion(){
   const right=G.results.filter(Boolean).length;
   const live = leagueFor(right + 0);
   const isAdd = q.mode==="addisjon";
-  const wide = q.wide || (!isAdd && q.choices && q.choices.some(c=>c.length>16));
+  const isSub = q.mode==="subtraksjon";
+  const isMiss = q.mode==="mangler";
+  const isPad = isAdd || isSub || isMiss;
+  const wide = q.wide || (!isPad && q.choices && q.choices.some(c=>c.length>16));
+  const padHTML = isAdd? addisjonHTML(q) : isSub? subtraksjonHTML(q) : isMiss? manglerHTML(q) : "";
   app.innerHTML = `
     <div class="qtop">
       <span class="tag t-${q.subj}">${sj.icon} ${esc(sj.name)}${q.subj in S.lvl? " · nivå "+S.lvl[q.subj]:""}</span>
@@ -1228,12 +1613,14 @@ function renderQuestion(){
     <div class="progress">${G.qs.map((_,k)=>`<i class="${k<G.i?(G.results[k]?"ok":"bad"):(k===G.i?"cur":"")}"></i>`).join("")}</div>
     <div class="card">
       <div class="small muted" style="margin-bottom:6px">${right} riktig${right===1?"":"e"} så langt · ${leagueHTML(live)}</div>
-      ${isAdd? addisjonHTML(q) : `${q.visual? `<div class="visual">${q.visual}</div>`:""}
+      ${isPad? padHTML : `${q.visual? `<div class="visual">${q.visual}</div>`:""}
       <div class="prompt">${q.prompt} ${q.say && q.sayInPrompt? speakBtn(q.say):""}</div>
       <div class="choices ${wide?"one":""}">${q.choices.map((c,k)=>`<button class="choice" data-k="${k}">${esc(c)}</button>`).join("")}</div>`}
       <div id="fb"></div>
     </div>`;
   if(isAdd) bindAddisjon(q);
+  else if(isSub) bindSubtraksjon(q);
+  else if(isMiss) bindMangler(q);
   else app.querySelectorAll(".choice").forEach(b=>b.onclick=()=>answer(+b.dataset.k));
   bindSpeak();
   $("#btnQuit").onclick=()=>{ if(confirm("Vil du avslutte safarien? Denne økta blir ikke lagret.")){ unbindAddisjon(); renderHome(); } };
@@ -1250,7 +1637,7 @@ function settleQuestion(ok){
   save(); beep(ok);
   const cheers=["Mål! ⚽","Perfekt piruett! 💃","Rett i blinken! 🎯","Applaus! 👏","Som en filmstjerne! 🎬","Supert! 🌟"];
   const last = G.i===G.qs.length-1;
-  const failMsg = q.mode==="addisjon"
+  const failMsg = (q.mode==="addisjon"||q.mode==="subtraksjon"||q.mode==="mangler")
     ? `Du klarte det til slutt! Riktig svar er <b>${esc(q.answer)}</b>.`
     : `Ikke helt. Riktig svar: <b>${esc(q.answer)}</b>`;
   $("#fb").innerHTML = `<div class="feedback ${ok?"ok":"bad"}">
